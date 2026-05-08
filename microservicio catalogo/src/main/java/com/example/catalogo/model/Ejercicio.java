@@ -21,11 +21,11 @@ public class Ejercicio {
     private Long id;
 
     @NotNull(message= "El nombre es obligatorio")
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String nombre;
 
     @NotBlank(message= "el grupo muscular es obligatorio")
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String grupoMuscular;
 
     private String descripcion;

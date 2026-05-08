@@ -13,7 +13,7 @@ public class SeriesDTO {
     @NotBlank(message= "El Id del ejercicio no puede estar vacio")
     private Long EjercicioId;
 
-    @Min(value = 0, message= "El eso debe ser positivo")
+    @Min(value = 0, message= "El peso debe ser positivo")
     private double peso;
 
     @Min(value = 1, message = "Minimo 1 repeticion")
