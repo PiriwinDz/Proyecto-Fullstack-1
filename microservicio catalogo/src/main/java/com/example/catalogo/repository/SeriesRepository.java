@@ -8,9 +8,9 @@ import org.springframework.stereotype.Repository;
 import com.example.catalogo.model.Series;
 
 @Repository
-public interface SeriesRepository extends JpaRepository<Series, Int> {
+public interface SeriesRepository extends JpaRepository<Series, Long> {
 
-    List<Series>FindByEjercicioId(int EjercicioId);
+    List<Series>FindByEjercicioId(Long EjercicioId);
     List<Series>FindAllByOrderByFechaHoraDesc();
 
 }

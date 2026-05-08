@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SeriesDTO {
     @NotBlank(message= "El Id del ejercicio no puede estar vacio")
-    private int EjercicioId;
+    private Long EjercicioId;
 
     @Min(value = 0, message= "El eso debe ser positivo")
     private double peso;

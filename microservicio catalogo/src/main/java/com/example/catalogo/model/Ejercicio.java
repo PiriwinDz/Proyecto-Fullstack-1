@@ -15,18 +15,19 @@ import lombok.NoArgsConstructor;
 @Builder
 
 public class Ejercicio {
+    // @ son anotaciones @valid 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTIFY)
-    private int Id;
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Long id;
 
     @NotNull(message= "El nombre es obligatorio")
     @Column(nullable = false, unique = true)
-    private String Nombre;
+    private String nombre;
 
     @NotBlank(message= "el grupo muscular es obligatorio")
     @Column(nullable = false, unique = true)
-    private String GrupoMuscular;
+    private String grupoMuscular;
 
     private String descripcion;
-
+    
 }

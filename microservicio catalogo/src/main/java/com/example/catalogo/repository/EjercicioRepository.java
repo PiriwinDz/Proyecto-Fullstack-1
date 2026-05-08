@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.example.catalogo.model.Ejercicio;
 
 @Repository
-public interface EjercicioRepository extends JpaRepository<Ejercicio, Int> {
+public interface EjercicioRepository extends JpaRepository<Ejercicio, Long> {
     Optional<Ejercicio>findByNombre(String nombre);
     List<Ejercicio>findByGrupoMuscular(String GrupoMuscular);
 

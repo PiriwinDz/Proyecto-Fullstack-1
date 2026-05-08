@@ -14,18 +14,18 @@ import lombok.*;
 @Builder
 public class Series {
     @Id 
-    @GeneratedValue(strategy= GenerationType.IDENTIFY)
-    private int id;
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Long id;
 
     @NotNull(message= "El id del ejercicio es obligatorio")
-    private int EjercicioId;
+    private Long EjercicioId;
     private double peso;
     private int repeticiones;
     private double RmEstimado;
 
     @Column(name= "fecha_hora")
     private LocalDateTime fechaHora;
-
+    // @PrePersist cuando esta todo correcto se ejecuta el siguiente metodo y @PreUpdate para que se vaya actualizando conforme se vayan cambiando los datos requeridos 
     @PrePersist
     @PreUpdate
     public void calcularRm(){
