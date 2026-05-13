@@ -15,6 +15,10 @@ import jakarta.validation.Valid;
 public class SeriesController {
     private final SeriesService seriesService; //
 
+    public SeriesController(SeriesService seriesService) {
+        this.seriesService = seriesService;
+    }
+
     @PostMapping
     public ResponseEntity<Series> registrar(@Valid @RequestBody SerieDTO dto) {
     //  el código 201 CREATED

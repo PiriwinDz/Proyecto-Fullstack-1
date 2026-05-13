@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
             .codigo(HttpStatus.BAD_REQUEST.value())
             .mensaje("Error en la validacion de los campos enviados")
             .ruta(request.getRequestURI())// indica que url fallo 
-            .erroresValidacion/(errors)
+            .erroresValidacion(errors)
             .build();
             // se retorna el ResponseEntity con el objeto y el codigo HTTP
             return new ResponseEntity<>(errorDTO, HttpStatus.BAD_REQUEST);

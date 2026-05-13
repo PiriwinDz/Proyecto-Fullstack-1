@@ -13,6 +13,10 @@ import com.example.catalogo.repository.SeriesRepository;
 public class SeriesService {
     private final SeriesRepository seriesRepository;
 
+    public SeriesService(SeriesRepository seriesRepository) {
+        this.seriesRepository = seriesRepository;
+    }
+
     public Series registrarSerie(SeriesDTO dto){
         Series series = new Series();
 
@@ -22,7 +26,7 @@ public class SeriesService {
         series.setRepeticiones(dto.getRepeticion());
 
         // JPA hace el @Prepersist que definimos en el modelo para calcular el RM y poner la fecha/hora automatico
-        return SeriesRepository.save(series);
+        return seriesRepository.save(series);
     }
 
     public List<Series> obtenerHistorialPorEjercicio(Long ejercicioId){

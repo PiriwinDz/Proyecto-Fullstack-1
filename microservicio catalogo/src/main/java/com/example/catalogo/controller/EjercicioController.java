@@ -16,6 +16,10 @@ import jakarta.validation.Valid;
 public class EjercicioController {
     private final EjercicioService ejercicioService;
 
+    public EjercicioController(EjercicioService ejercicioService) {
+        this.ejercicioService = ejercicioService;
+    }
+
     @PostMapping
     public ResponseEntity<Ejercicio> crear(@Valid @RequestBody EjercicioDTO dto) {
         //  el código 201 CREATED
@@ -35,7 +39,7 @@ public class EjercicioController {
         // Código 200 OK  
         return ResponseEntity.ok(ejercicios);
     }
-
+    
     @GetMapping("/{id}")
     public ResponseEntity<Ejercicio> buscarPorId(@PathVariable Long id) {
         // Manejo de 404 para recursos inexistentes

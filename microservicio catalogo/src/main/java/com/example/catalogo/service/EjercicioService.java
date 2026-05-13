@@ -1,6 +1,7 @@
 package com.example.catalogo.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,11 @@ import com.example.catalogo.repository.EjercicioRepository;
 
 public class EjercicioService {
     private final EjercicioRepository ejercicioRepository;
+
+    
+    public EjercicioService(EjercicioRepository ejercicioRepository) {
+        this.ejercicioRepository = ejercicioRepository;
+    }
 
     public Ejercicio guardarEjercicio(EjercicioDTO dto){
 
@@ -25,5 +31,9 @@ public class EjercicioService {
 
     public List<Ejercicio> listarTodo() {
         return ejercicioRepository.findAll();
+    }
+
+    public Optional<Ejercicio> buscarPorId(Long id) {
+        return ejercicioRepository.findById(id);
     }
 }
