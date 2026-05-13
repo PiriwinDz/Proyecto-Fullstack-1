@@ -1,8 +1,18 @@
 package com.example.catalogo.controller;
 
+
+import java.util.List;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
+import com.example.catalogo.dto.EjercicioDTO;
+import com.example.catalogo.model.Ejercicio;
+import com.example.catalogo.service.EjercicioService;
+
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/ejercicios")
-@RequiredArgsContructor
+
 public class EjercicioController {
     private final EjercicioService ejercicioService;
 

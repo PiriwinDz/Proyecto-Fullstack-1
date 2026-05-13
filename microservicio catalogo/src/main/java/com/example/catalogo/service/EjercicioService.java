@@ -1,6 +1,15 @@
+package com.example.catalogo.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.example.catalogo.dto.EjercicioDTO;
+import com.example.catalogo.model.Ejercicio;
+import com.example.catalogo.repository.EjercicioRepository;
 
 @Service
-@RequiredArgsContructor // lombok genera el constructor 
+
 public class EjercicioService {
     private final EjercicioRepository ejercicioRepository;
 

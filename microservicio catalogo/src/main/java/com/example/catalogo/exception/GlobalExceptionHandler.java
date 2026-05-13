@@ -1,6 +1,12 @@
 package com.example.catalogo.exception;
 
 import java.time.LocalDateTime;
+import java.util.*;
+import org.springframework.http.*;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
+import com.example.catalogo.dto.ErrorDTOEstandar;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestControllerAdvice // lo define como el manejador global 
 public class GlobalExceptionHandler {
@@ -19,7 +25,7 @@ public class GlobalExceptionHandler {
 
             //el DTO de error estandar 
             ErrorDTOEstandar errorDTO = ErrorDTOEstandar.builder()
-            .timestap(LocalDateTime.now())
+            .timestamp(LocalDateTime.now())
             .codigo(HttpStatus.BAD_REQUEST.value())
             .mensaje("Error en la validacion de los campos enviados")
             .ruta(request.getRequestURI())// indica que url fallo 
