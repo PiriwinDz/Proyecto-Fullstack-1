@@ -15,6 +15,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import com.fasterxml.jackson.annotation.JsonIgnore; // para ocultar el password en respuestas 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name = "persona")
 @Data
@@ -39,6 +42,11 @@ public class Persona {
     @NotBlank(message =  "El email no puede estar vacio")
     @Column(unique = true)
     private String email;
+
+    @JsonProperty(access =  JsonProperty.Access.WRITE_ONLY)
+    @NotBlank(message = "La contraseña no puede estar vacia")
+    @Column(nullable = false)
+    private String password;
 
     @ElementCollection
     private List<Integer> pagosIds;

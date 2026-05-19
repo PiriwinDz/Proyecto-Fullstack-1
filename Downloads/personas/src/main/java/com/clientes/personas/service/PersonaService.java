@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,14 +19,26 @@ public class PersonaService {
 
     private final PersonaRepository repository;
     private final RestTemplate restTemplate;
+    private final PasswordEncoder passwordEncoder;
 
-    public PersonaService(PersonaRepository repository, RestTemplate restTemplate) {
+    public PersonaService(
+            PersonaRepository repository,
+            RestTemplate restTemplate,
+            PasswordEncoder passwordEncoder) {
+
         this.repository = repository;
         this.restTemplate = restTemplate;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    // Guardar persona
+    // Guardar persona con contraseña encriptada
     public Persona guardarPersona(Persona persona) {
+
+        String passwordEncriptada =
+                passwordEncoder.encode(persona.getPassword());
+
+        persona.setPassword(passwordEncriptada);
+
         return repository.save(persona);
     }
 
@@ -75,6 +88,7 @@ public class PersonaService {
     public List<PersonaListadoDTO> listarDTO() {
 
         List<Persona> personas = repository.findAll();
+
         List<PersonaListadoDTO> lista = new ArrayList<>();
 
         for (Persona p : personas) {
@@ -117,7 +131,7 @@ public class PersonaService {
         dto.setNombre(persona.getNombre());
         dto.setEmail(persona.getEmail());
 
-        // Debes tener List<String> pagos en el DTO
+        // Debes tener List<String> pagos en tu DTO
         dto.setPagos(pagosInfo);
 
         return dto;

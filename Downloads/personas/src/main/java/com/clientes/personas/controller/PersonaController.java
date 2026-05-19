@@ -2,22 +2,16 @@ package com.clientes.personas.controller;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import com.clientes.personas.dto.PersonaListadoDTO;
+import com.clientes.personas.dto.PersonaSimpleDTO;
 import com.clientes.personas.model.Pago;
 import com.clientes.personas.model.Persona;
 import com.clientes.personas.service.PersonaService;
 
-import com.clientes.personas.dto.PersonaSimpleDTO;
-
-
-
-import com.clientes.personas.dto.PersonaListadoDTO;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/personas")
@@ -31,26 +25,31 @@ public class PersonaController {
 
     // POST: agregar persona
     @PostMapping("/agregar")
-    public Persona crearPersona(@RequestBody Persona persona) {
-        return service.guardarPersona(persona);
+    public ResponseEntity<Persona> crearPersona(@Valid @RequestBody Persona persona) {
+
+        Persona nueva = service.guardarPersona(persona);
+
+        return ResponseEntity.status(201).body(nueva);
     }
 
+    // GET: obtener pagos de una persona
     @GetMapping("/{id}/pagos")
     public List<Pago> obtenerPagosPorPersona(@PathVariable Integer id) {
+
         return service.obtenerPagosPorPersona(id);
     }
 
-    // GET: listar personas usando DTO (respuesta simplificada)
+    // GET: listar personas con DTO
     @GetMapping("/listar-dto")
     public List<PersonaListadoDTO> listarDTO() {
+
         return service.listarDTO();
     }
 
-    // GET: version simplificada 
+    // GET: detalle simple de persona
     @GetMapping("/{id}/detalle-simple")
     public PersonaSimpleDTO obtenerDetalleSimple(@PathVariable Integer id) {
+
         return service.obtenerDetalleSimple(id);
     }
-
-
 }
