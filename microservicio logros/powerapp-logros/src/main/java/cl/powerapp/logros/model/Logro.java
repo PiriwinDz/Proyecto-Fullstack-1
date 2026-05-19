@@ -18,6 +18,8 @@ public class Logro {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
+    private Long usuarioId;
+
     @NotBlank(message="El nombre no puede estar vacio")
     @Column(nullable= false)
     private String nombre;
@@ -32,4 +34,7 @@ public class Logro {
     @NotBlank(message="La condicion no puede estar vacia")
     private String condicion; // Ej: Rachas en dias
 
+    private String fechaDesbloqueo;
+
 }
+
