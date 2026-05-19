@@ -8,18 +8,13 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class LogroUsuario {
+public class Usuario {
 
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer usuarioId;
+    private String nombre;
 
-    private Integer logroId;
-
-    private Boolean desbloqueado;
-
-    private String fechaDesbloqueo;
-
+    private String correo;
 }
