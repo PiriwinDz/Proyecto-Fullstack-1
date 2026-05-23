@@ -1,80 +1,78 @@
-package cl.powerapp.pagos.service;
+package com.powerApp.pagos.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
-import cl.powerapp.pagos.model.EstadoPago;
-import cl.powerapp.pagos.model.Pago;
-import cl.powerapp.pagos.repository.PagoRepository;
+import com.powerApp.pagos.model.EstadoPago;
+import com.powerApp.pagos.model.Pago;
+import com.powerApp.pagos.repository.PagoRepository;
 
-@Configuration
-public class DataLoader {
+@Component
+@SuppressWarnings("all")
+public class DataLoader implements CommandLineRunner {
 
-    @Bean
-    CommandLineRunner init(PagoRepository repository) {
-        return args -> {
-            if (repository.count() == 0) {
+        private final PagoRepository repository;
 
-                repository.save(
-                    new Pago(
-                        null,
-                        1L, // usuarioId
-                        101L, // membresiaId
-                        new BigDecimal("19990"),
-                        EstadoPago.PENDIENTE,
-                        "Tarjeta de crédito",
-                        "REF12345",
-                        LocalDateTime.now(),
-                        null
-                    )
-                );
+        public DataLoader(PagoRepository repository) {
+                this.repository = repository;
+        }
 
-                repository.save(
-                    new Pago(
-                        null,
-                        2L,
-                        102L,
-                        new BigDecimal("29990"),
-                        EstadoPago.PROCESADO,
-                        "Transferencia bancaria",
-                        "REF67890",
-                        LocalDateTime.now(),
-                        LocalDateTime.now()
-                    )
-                );
+        @Override
+        public void run(String... args) throws Exception {
+                if (args != null && this.repository.count() == 0) {
 
-                repository.save(
-                    new Pago(
-                        null,
-                        3L,
-                        103L,
-                        new BigDecimal("9990"),
-                        EstadoPago.FALLIDO,
-                        "Tarjeta de débito",
-                        "REF11111",
-                        LocalDateTime.now(),
-                        LocalDateTime.now()
-                    )
-                );
+                        this.repository.save(crearPago(
+                                        1L, 101L, "19990",
+                                        EstadoPago.PENDIENTE,
+                                        "Tarjeta de crédito",
+                                        "REF12345"));
 
-                repository.save(
-                    new Pago(
-                        null,
-                        4L,
-                        104L,
-                        new BigDecimal("49990"),
-                        EstadoPago.PROCESADO,
-                        "PayPal",
-                        "REF22222",
-                        LocalDateTime.now(),
-                        LocalDateTime.now()
-                    )
-                );
-            }
-        };
-    }
+                        this.repository.save(crearPago(
+                                        2L, 102L, "29990",
+                                        EstadoPago.APROBADO,
+                                        "Transferencia bancaria",
+                                        "REF67890"));
+
+                        this.repository.save(crearPago(
+                                        3L, 103L, "9990",
+                                        EstadoPago.RECHAZADO,
+                                        "Tarjeta de débito",
+                                        "REF11111"));
+
+                        this.repository.save(crearPago(
+                                        4L, 104L, "49990",
+                                        EstadoPago.APROBADO,
+                                        "PayPal",
+                                        "REF22222"));
+                }
+        }
+
+        private static Pago crearPago(
+                        Long usuarioId,
+                        Long membresiaId,
+                        String monto,
+                        EstadoPago estado,
+                        String metodoPago,
+                        String referencia) {
+
+                Pago pago = new Pago();
+                pago.setUsuarioId(usuarioId);
+                pago.setMembresiaId(membresiaId);
+                pago.setMonto(new BigDecimal(monto));
+                pago.setEstado(estado);
+                pago.setMetodoPago(metodoPago);
+                pago.setReferenciaPasarela(referencia);
+                pago.setCreadoEn(LocalDateTime.now());
+
+                if (estado == EstadoPago.APROBADO
+                                || estado == EstadoPago.RECHAZADO
+                                || estado == EstadoPago.REEMBOLSADO) {
+                        pago.setProcesadoEn(LocalDateTime.now());
+                }
+
+                return pago;
+        }
 }

@@ -1,7 +1,7 @@
-package cl.powerapp.pagos.repository;
+package com.powerApp.pagos.repository;
 
-import cl.powerapp.pagos.model.Pago;
-import cl.powerapp.pagos.model.EstadoPago;
+import com.powerApp.pagos.model.Pago;
+import com.powerApp.pagos.model.EstadoPago;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

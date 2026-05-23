@@ -1,15 +1,15 @@
-package cl.powerapp.pagos.service;
+package com.powerApp.pagos.service;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import cl.powerapp.pagos.dto.PagoRequestDTO;
-import cl.powerapp.pagos.dto.PagoResponseDTO;
-import cl.powerapp.pagos.model.Pago;
-import cl.powerapp.pagos.model.EstadoPago;
-import cl.powerapp.pagos.repository.PagoRepository;
+import com.powerApp.pagos.dto.PagoRequestDTO;
+import com.powerApp.pagos.dto.PagoResponseDTO;
+import com.powerApp.pagos.model.Pago;
+import com.powerApp.pagos.model.EstadoPago;
+import com.powerApp.pagos.repository.PagoRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -82,7 +82,7 @@ public class PagoService {
     // PUT: actualizar pago
     public Pago actualizar(Long id, Pago nuevoPago) {
         Pago pago = pagoRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Pago no encontrado"));
+                .orElseThrow(() -> new RuntimeException("Pago no encontrado"));
 
         pago.setMonto(nuevoPago.getMonto());
         pago.setMetodoPago(nuevoPago.getMetodoPago());

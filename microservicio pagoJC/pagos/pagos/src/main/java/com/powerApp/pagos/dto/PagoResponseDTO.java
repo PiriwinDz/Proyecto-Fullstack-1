@@ -1,4 +1,4 @@
-package cl.powerapp.pagos.dto;
+package com.powerApp.pagos.dto;
 
 import lombok.Data;
 

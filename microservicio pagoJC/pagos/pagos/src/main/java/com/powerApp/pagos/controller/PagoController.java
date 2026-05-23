@@ -1,9 +1,9 @@
-package cl.powerapp.pagos.controller;
+package com.powerApp.pagos.controller;
 
-import cl.powerapp.pagos.dto.PagoRequestDTO;
-import cl.powerapp.pagos.dto.PagoResponseDTO;
-import cl.powerapp.pagos.model.Pago;
-import cl.powerapp.pagos.service.PagoService;
+import com.powerApp.pagos.dto.PagoRequestDTO;
+import com.powerApp.pagos.dto.PagoResponseDTO;
+import com.powerApp.pagos.model.Pago;
+import com.powerApp.pagos.service.PagoService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -86,4 +86,3 @@ public class PagoController {
         return ResponseEntity.ok("Pago eliminado correctamente");
     }
 }
-

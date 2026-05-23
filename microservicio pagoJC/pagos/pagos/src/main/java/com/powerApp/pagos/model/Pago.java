@@ -1,4 +1,4 @@
-package cl.powerapp.pagos.model;
+package com.powerApp.pagos.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
