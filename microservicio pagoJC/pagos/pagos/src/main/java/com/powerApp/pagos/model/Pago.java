@@ -1,19 +1,17 @@
-package com.powerApp.pagos.model;
+package cl.powerapp.pagos.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "pago")
+@Table(name = "pagos")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Pago {
 
     @Id
@@ -24,24 +22,24 @@ public class Pago {
     @Column(nullable = false)
     private Long usuarioId;
 
-    @NotNull(message = "La membresía asociada es obligatoria")
+    @NotNull(message = "El ID de la membresía es obligatorio")
     @Column(nullable = false)
     private Long membresiaId;
 
-    @NotNull(message = "El monto no puede estar vacío")
-    @DecimalMin(value = "0.01", message = "El monto debe ser mayor a cero")
+    @NotNull(message = "El monto es obligatorio")
+    @DecimalMin(value = "0.0", inclusive = false, message = "El monto debe ser mayor a 0")
     @Column(nullable = false)
     private BigDecimal monto;
 
-    @NotNull(message = "El estado del pago es obligatorio")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private EstadoPago estado = EstadoPago.PENDIENTE;
 
-    @NotBlank(message = "El método de pago no puede estar en blanco")
+    @NotBlank(message = "El método de pago es obligatorio")
     @Column(nullable = false)
     private String metodoPago;
 
+    @Size(max = 100, message = "La referencia no puede superar 100 caracteres")
     private String referenciaPasarela;
 
     @Column(updatable = false)
@@ -52,8 +50,5 @@ public class Pago {
     @PrePersist
     public void prePersist() {
         creadoEn = LocalDateTime.now();
-        if (this.estado == null) {
-            this.estado = EstadoPago.PENDIENTE;
-        }
     }
 }
