@@ -1,4 +1,4 @@
-package com.example.microservicio.planes;
+package com.example.microservicio;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
