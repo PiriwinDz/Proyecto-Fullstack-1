@@ -8,7 +8,8 @@
             "mainClass": "com.example.autenticacion.AutenticacionApplication",
             "projectName": "powerapp-autenticacion",
             "args": "",
-            "envFile": "${workspaceFolder}/.env"
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=58688 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=powerapp-autenticacion"
         },
         {
             "type": "java",
@@ -28,6 +29,47 @@
             "cwd": "${workspaceFolder}",
             "mainClass": "com.example.sede.SedeApplication",
             "projectName": "sede",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=58712 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=sede"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-PagosApplication<pagos>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.powerApp.pagos.PagosApplication",
+            "projectName": "pagos",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-MicroservicioPlanesApplication<microservicio-planes>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.example.microservicio.MicroservicioPlanesApplication",
+            "projectName": "microservicio-planes",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-CatalogoApplication<catalogo>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.example.catalogo.CatalogoApplication",
+            "projectName": "catalogo",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-AlertasApplication<alertas>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.example.alertas.AlertasApplication",
+            "projectName": "alertas",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
         }
