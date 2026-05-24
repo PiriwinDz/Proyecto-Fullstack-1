@@ -22,20 +22,20 @@ public class Usuario {
     @Id // indica que este campo es la clave primaria
     @GeneratedValue(strategy = GenerationType.IDENTITY) // autoincremental en la BD
     private Long id;
-
+    // 1 postman
     @NotBlank // no permite null ni vacio
     @Column(nullable = false, length = 100) // columna obligatoria, maximo 100 caracteres
     private String nombre;
-
+    // 2 postman
     @Email // valida que el formato sea correo@dominio.com
     @NotBlank // no permite null ni vacio
     @Column(unique = true, nullable = false) // no puede repetirse en la BD
     private String correo;
-
+    // 3 postman
     @NotBlank // no permite null ni vacio
     @Column(nullable = false) // columna obligatoria en la BD
     private String password; // se guarda encriptado con BCrypt, nunca en texto plano
-
+    // 4 postman
     @Enumerated(EnumType.STRING) // guarda el nombre del enum como texto (ATLETA, TRABAJADOR...)
     @NotNull // no permite null
     @Column(nullable = false) // columna obligatoria en la BD
