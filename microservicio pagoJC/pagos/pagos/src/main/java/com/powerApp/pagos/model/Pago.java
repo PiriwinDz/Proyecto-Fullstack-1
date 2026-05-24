@@ -3,8 +3,8 @@ package com.powerApp.pagos.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "pagos")
@@ -28,11 +28,12 @@ public class Pago {
 
     @NotNull(message = "El monto es obligatorio")
     @DecimalMin(value = "0.0", inclusive = false, message = "El monto debe ser mayor a 0")
-    @Column(nullable = false)
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal monto;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Builder.Default
     private EstadoPago estado = EstadoPago.PENDIENTE;
 
     @NotBlank(message = "El método de pago es obligatorio")

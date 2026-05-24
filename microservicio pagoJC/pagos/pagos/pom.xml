@@ -21,9 +21,21 @@
     <description>Microservicio de pagos</description>
 
     <properties>
-        <java.version>21</java.version>
-    </properties>
-
+		<java.version>21</java.version>
+		<spring-cloud.version>2024.0.0</spring-cloud.version>
+	</properties>
+		
+		<dependencyManagement>
+			<dependencies>
+				<dependency>
+					<groupId>org.springframework.cloud</groupId>
+					<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+					<type>pom</type>
+					<scope>import</scope>
+				</dependency>
+			</dependencies>
+		</dependencyManagement>
     <dependencies>
 
         <!-- WEB -->
@@ -50,10 +62,10 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <!-- MYSQL -->
+        <!-- POSTGRESQL -->
         <dependency>
-            <groupId>com.mysql</groupId>
-            <artifactId>mysql-connector-j</artifactId>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
 

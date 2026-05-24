@@ -2,9 +2,13 @@ package com.powerApp.pagos.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import java.math.BigDecimal;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class PagoRequestDTO {
 
     @NotNull(message = "El usuarioId es obligatorio")

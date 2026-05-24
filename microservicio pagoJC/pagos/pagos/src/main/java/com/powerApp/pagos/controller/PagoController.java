@@ -5,8 +5,6 @@ import com.powerApp.pagos.dto.PagoResponseDTO;
 import com.powerApp.pagos.model.Pago;
 import com.powerApp.pagos.service.PagoService;
 
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -19,11 +17,15 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/pagos")
-@RequiredArgsConstructor
 @Validated
 public class PagoController {
 
     private final PagoService pagoService;
+    
+
+    public PagoController(PagoService pagoService) {
+        this.pagoService = pagoService;
+    }
 
     // GET: listar todos los pagos
     @GetMapping

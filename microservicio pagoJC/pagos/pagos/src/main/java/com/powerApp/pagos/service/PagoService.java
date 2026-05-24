@@ -5,10 +5,8 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.powerApp.pagos.dto.PagoRequestDTO;
-import com.powerApp.pagos.dto.PagoResponseDTO;
-import com.powerApp.pagos.model.Pago;
-import com.powerApp.pagos.model.EstadoPago;
+import com.powerApp.pagos.dto.*;
+import com.powerApp.pagos.model.*;
 import com.powerApp.pagos.repository.PagoRepository;
 
 import lombok.RequiredArgsConstructor;
