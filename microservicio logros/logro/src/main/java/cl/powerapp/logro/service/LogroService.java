@@ -137,7 +137,7 @@ public class LogroService {
 
         RestTemplate restTemplate = new RestTemplate();
 
-        String url = "http://localhost:8081/api/v1/auth/usuarios/" + usuarioId;
+        String url = "http://localhost:8081/api/auth/usuarios/" + usuarioId;
 
         return restTemplate.getForObject(url, Usuario.class);
     }
