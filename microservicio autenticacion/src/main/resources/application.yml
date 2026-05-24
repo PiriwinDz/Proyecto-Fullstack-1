@@ -16,3 +16,7 @@ spring:
 jwt:
   secret: powerapp2024SecretKeyMuyLargaParaQueSeaSegura123456
   expiration: 86400000
+
+hikari:
+      maximum-pool-size: 2 # Limita a este microservicio a usar máximo 2 conexiones
+      minimum-idle: 1      # Mantiene mínimo 1 conexión abierta

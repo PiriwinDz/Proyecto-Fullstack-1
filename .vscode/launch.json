@@ -1,0 +1,35 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-AutenticacionApplication<powerapp-autenticacion>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.example.autenticacion.AutenticacionApplication",
+            "projectName": "powerapp-autenticacion",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ResenasApplication<resenas>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.powerapp.resenas.ResenasApplication",
+            "projectName": "resenas",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=56286 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=resenas"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-SedeApplication<sede>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.example.sede.SedeApplication",
+            "projectName": "sede",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
