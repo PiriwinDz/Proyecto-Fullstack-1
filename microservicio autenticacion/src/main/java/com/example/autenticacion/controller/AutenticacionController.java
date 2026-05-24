@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController // indica que esta clase maneja peticiones HTTP y devuelve JSON
-@RequestMapping("/api/v1/auth") // prefijo base para todos los endpoints de este controller
+@RequestMapping("/api/auth") // prefijo base para todos los endpoints de este controller
 @RequiredArgsConstructor // inyecta el service automaticamente
 public class AutenticacionController {
 
     private final AutenticacionService autenticacionService;
 
-    // POST /api/v1/auth/register
+    // POST /api/auth/register
     // @Valid activa las validaciones del RegisterRequestDTO antes de entrar al metodo
     // @RequestBody convierte el JSON del body en un objeto RegisterRequestDTO
     @PostMapping("/register")
@@ -29,27 +29,27 @@ public class AutenticacionController {
                 .body(autenticacionService.registrar(dto));
     }
 
-    // POST /api/v1/auth/login
+    // POST /api/auth/login
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> login(@Valid @RequestBody LoginRequestDTO dto) {
         return ResponseEntity.ok(autenticacionService.login(dto)); // devuelve 200
     }
 
-    // GET /api/v1/auth/usuarios
+    // GET /api/auth/usuarios
     // endpoint para que el administrador vea todos los usuarios
     @GetMapping("/usuarios")
     public ResponseEntity<List<UsuarioResponseDTO>> listar() {
         return ResponseEntity.ok(autenticacionService.listarTodos()); // devuelve 200 con la lista
     }
 
-    // GET /api/v1/auth/usuarios/{id}
+    // GET /api/auth/usuarios/{id}
     // @PathVariable extrae el {id} de la URL
     @GetMapping("/usuarios/{id}")
     public ResponseEntity<UsuarioResponseDTO> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(autenticacionService.buscarPorId(id)); // devuelve 200
     }
 
-    // PUT /api/v1/auth/usuarios/{id}/desactivar
+    // PUT /api/auth/usuarios/{id}/desactivar
     // desactiva un usuario sin borrarlo, solo el administrador deberia llamar esto
     @PutMapping("/usuarios/{id}/desactivar")
     public ResponseEntity<UsuarioResponseDTO> desactivar(@PathVariable Long id) {
