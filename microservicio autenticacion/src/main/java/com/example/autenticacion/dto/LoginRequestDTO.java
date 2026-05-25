@@ -6,8 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// DTO que transporta los datos del formulario de login
-// solo necesita correo y password, nada mas
+
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,5 +18,5 @@ public class LoginRequestDTO {
     private String correo;
 
     @NotBlank(message = "La contrasena es obligatoria")
-    private String password; // llega en texto plano, se compara con el hash de la BD
+    private String password; 
 }
