@@ -11,16 +11,12 @@ import java.util.List;
 
 public interface ResenaRepository extends JpaRepository<Resena, Long> {
 
-    // Buscar reseñas por usuario
     List<Resena> findByUsuarioId(Long usuarioId);
 
-    // Buscar reseñas por ejercicio
     List<Resena> findByEjercicioId(Long ejercicioId);
 
-    // Buscar reseñas por calificacion
     List<Resena> findByCalificacion(Integer calificacion);
 
-    // Buscar reseñas que contengan texto en comentario
     List<Resena> findByComentarioContainingIgnoreCase(String comentario);
 
 }
