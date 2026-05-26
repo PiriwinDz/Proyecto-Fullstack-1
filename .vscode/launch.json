@@ -51,7 +51,8 @@
             "mainClass": "com.example.microservicio.MicroservicioPlanesApplication",
             "projectName": "microservicio-planes",
             "args": "",
-            "envFile": "${workspaceFolder}/.env"
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote"
         },
         {
             "type": "java",
@@ -61,7 +62,8 @@
             "mainClass": "com.example.catalogo.CatalogoApplication",
             "projectName": "catalogo",
             "args": "",
-            "envFile": "${workspaceFolder}/.env"
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote"
         },
         {
             "type": "java",
@@ -70,6 +72,17 @@
             "cwd": "${workspaceFolder}",
             "mainClass": "com.example.alertas.AlertasApplication",
             "projectName": "alertas",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-SoporteApplication<soporte>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "cl.tickets.soporte.SoporteApplication",
+            "projectName": "soporte",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
         }
