@@ -18,4 +18,3 @@ public class EjercicioDTO {
     
     private String descripcion;
 }
-// un Dto evita exponer la estructura interna ademas de mantener la independencia entre microservicios 
