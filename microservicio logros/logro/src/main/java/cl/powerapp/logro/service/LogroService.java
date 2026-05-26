@@ -38,8 +38,8 @@ public class LogroService {
         return repository.save(logro);
     }
 
-
-    public LogroUsuario desbloquearLogro(DesbloquearLogroDTO dto){
+    public LogroUsuario desbloquearLogro(
+            DesbloquearLogroDTO dto){
 
         Optional<Logro> optionalLogro =
                 repository.findById(dto.getLogroId());
@@ -48,7 +48,16 @@ public class LogroService {
 
             throw new LogroNoEncontradoException(
                     "El logro no existe");
-    }
+        }   
+
+        Usuario usuario =
+                obtenerUsuario(dto.getUsuarioId());
+
+        if(usuario == null){
+
+            throw new UsuarioNoEncontradoException(
+                    "El usuario no existe");
+        }
 
         boolean yaExiste =
                 logroUsuarioRepository
@@ -60,7 +69,7 @@ public class LogroService {
 
             throw new LogroYaDesbloqueadoException(
                     "El usuario ya desbloqueó este logro");
-    }
+        }
 
         LogroUsuario nuevo = new LogroUsuario();
 
@@ -159,14 +168,11 @@ public class LogroService {
 
         RestTemplate restTemplate = new RestTemplate();
 
-        String url =
-                "http://localhost:8089/auth/usuarios/"+ usuarioId;
+        String url = "http://localhost:8089/auth/usuarios/"+ usuarioId;
 
         try{
 
-            return restTemplate.getForObject(
-                    url,
-                    Usuario.class);
+            return restTemplate.getForObject(url,Usuario.class);
 
         }catch(HttpClientErrorException.NotFound ex){
 
