@@ -31,7 +31,7 @@ public class SeriesService {
 
     public List<Series> obtenerHistorialPorEjercicio(Long ejercicioId){
         // Reutilizamos el metodo creado en repository
-        return seriesRepository.FindByEjercicioId(ejercicioId);
+        return seriesRepository.findByEjercicioId(ejercicioId);
     }
 
     public List<Series> listarTodasLasSeries() {
