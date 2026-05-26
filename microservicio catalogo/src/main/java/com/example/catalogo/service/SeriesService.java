@@ -20,17 +20,17 @@ public class SeriesService {
     public Series registrarSerie(SeriesDTO dto){
         Series series = new Series();
 
-        //pasalos los datos del DTO a la entidad
+        
         series.setEjercicioId(dto.getEjercicioId());
         series.setPeso(dto.getPeso());
         series.setRepeticiones(dto.getRepeticion());
 
-        // JPA hace el @Prepersist que definimos en el modelo para calcular el RM y poner la fecha/hora automatico
+        
         return seriesRepository.save(series);
     }
 
     public List<Series> obtenerHistorialPorEjercicio(Long ejercicioId){
-        // Reutilizamos el metodo creado en repository
+        
         return seriesRepository.findByEjercicioId(ejercicioId);
     }
 
