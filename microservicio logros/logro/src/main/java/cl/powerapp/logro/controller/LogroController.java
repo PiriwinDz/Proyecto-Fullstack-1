@@ -34,7 +34,7 @@ public class LogroController {
     }
 
     @PostMapping("/desbloquear") 
-    public ResponseEntity<LogroUsuario> desbloquearLogro(@RequestBody 
+    public ResponseEntity<LogroUsuario> desbloquearLogro(@Valid @RequestBody 
                                     DesbloquearLogroDTO dto){
 
             LogroUsuario nuevo = service.desbloquearLogro(dto);
