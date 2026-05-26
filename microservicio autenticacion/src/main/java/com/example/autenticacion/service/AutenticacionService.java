@@ -14,41 +14,41 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Service // lo registra como componente de Spring
-@RequiredArgsConstructor // genera el constructor con los campos final (inyeccion de dependencias)
+@Service 
+@RequiredArgsConstructor 
 public class AutenticacionService {
 
-    private final UsuarioRepository usuarioRepository; // acceso a la BD
-    private final JwtService jwtService;               // generacion de tokens
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); // encriptador de passwords
+    private final UsuarioRepository usuarioRepository; 
+    private final JwtService jwtService;               
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); 
 
-    // registra un nuevo usuario en el sistema
+    
     public AuthResponseDTO registrar(RegisterRequestDTO dto) {
-        // verifica que el correo no este registrado antes de crear el usuario
+        
         if (usuarioRepository.existsByCorreo(dto.getCorreo())) {
             throw new IllegalArgumentException("Ya existe una cuenta con el correo: " + dto.getCorreo());
         }
 
-        // construye el objeto Usuario con los datos del DTO
+        
         Usuario usuario = Usuario.builder()
                 .nombre(dto.getNombre())
                 .correo(dto.getCorreo())
-                .password(passwordEncoder.encode(dto.getPassword())) // encripta el password antes de guardar
+                .password(passwordEncoder.encode(dto.getPassword())) 
                 .rol(dto.getRol())
                 .activo(true)
-                .creadoEn(LocalDateTime.now()) // asigna la fecha actual
+                .creadoEn(LocalDateTime.now()) 
                 .build();
 
-        Usuario guardado = usuarioRepository.save(usuario); // guarda en la BD y retorna el objeto con id generado
+        Usuario guardado = usuarioRepository.save(usuario); 
 
-        // genera el JWT con el id, correo y rol del usuario recien creado
+        
         String token = jwtService.generarToken(
                 guardado.getId(),
                 guardado.getCorreo(),
                 guardado.getRol().name()
         );
 
-        // retorna los datos del usuario y el token al controller
+        
         return AuthResponseDTO.builder()
                 .id(guardado.getId())
                 .nombre(guardado.getNombre())
@@ -58,23 +58,23 @@ public class AutenticacionService {
                 .build();
     }
 
-    // valida credenciales y genera token si son correctas
+    
     public AuthResponseDTO login(LoginRequestDTO dto) {
-        // busca el usuario por correo, si no existe lanza excepcion con mensaje generico (seguridad)
+        
         Usuario usuario = usuarioRepository.findByCorreo(dto.getCorreo())
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Correo o contrasena incorrectos"));
 
-        // compara el password ingresado con el hash guardado en la BD
+        
         if (!passwordEncoder.matches(dto.getPassword(), usuario.getPassword())) {
-            throw new IllegalArgumentException("Correo o contrasena incorrectos"); // mismo mensaje para no dar pistas
+            throw new IllegalArgumentException("Correo o contrasena incorrectos"); 
         }
 
-        // verifica que la cuenta no este desactivada
+        
         if (!usuario.getActivo()) {
             throw new IllegalArgumentException("La cuenta esta desactivada");
         }
 
-        // genera el JWT con los datos del usuario autenticado
+        
         String token = jwtService.generarToken(
                 usuario.getId(),
                 usuario.getCorreo(),
@@ -90,38 +90,38 @@ public class AutenticacionService {
                 .build();
     }
 
-    // busca un usuario por id, lanza excepcion si no existe
+    
     public UsuarioResponseDTO buscarPorId(Long id) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new UsuarioNoEncontradoException(id));
-        return convertirADTO(usuario); // convierte a DTO antes de devolver (sin password)
+        return convertirADTO(usuario); 
     }
 
-    // retorna todos los usuarios del sistema
+    
     public List<UsuarioResponseDTO> listarTodos() {
         return usuarioRepository.findAll()
                 .stream()
-                .map(this::convertirADTO) // convierte cada Usuario a UsuarioResponseDTO
+                .map(this::convertirADTO) 
                 .toList();
     }
 
-    // desactiva un usuario sin borrarlo de la BD
+    
     public UsuarioResponseDTO desactivar(Long id) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new UsuarioNoEncontradoException(id));
-        usuario.setActivo(false); // cambia el estado a inactivo
-        usuarioRepository.save(usuario); // guarda el cambio en la BD
+        usuario.setActivo(false); 
+        usuarioRepository.save(usuario); 
         return convertirADTO(usuario);
     }
 
-    // metodo privado reutilizable que convierte Usuario a UsuarioResponseDTO
-    // se usa para no repetir el mismo codigo en cada metodo
+    
+    
     private UsuarioResponseDTO convertirADTO(Usuario usuario) {
         return UsuarioResponseDTO.builder()
                 .id(usuario.getId())
                 .nombre(usuario.getNombre())
                 .correo(usuario.getCorreo())
-                .rol(usuario.getRol().name()) // convierte el enum a String
+                .rol(usuario.getRol().name()) 
                 .activo(usuario.getActivo())
                 .creadoEn(usuario.getCreadoEn())
                 .build();

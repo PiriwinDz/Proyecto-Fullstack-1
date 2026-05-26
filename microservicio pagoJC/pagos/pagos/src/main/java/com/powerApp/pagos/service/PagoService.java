@@ -17,42 +17,34 @@ public class PagoService {
 
     private final PagoRepository pagoRepository;
 
-    // GET: listar todos los pagos
     public List<Pago> listar() {
         return pagoRepository.findAll();
     }
 
-    // GET: buscar pago por ID
     public Optional<Pago> buscarPorId(Long id) {
         return pagoRepository.findById(id);
     }
 
-    // GET: buscar pagos por usuario
     public List<Pago> buscarPorUsuario(Long usuarioId) {
         return pagoRepository.findByUsuarioId(usuarioId);
     }
 
-    // GET: buscar pagos por membresía
     public List<Pago> buscarPorMembresia(Long membresiaId) {
         return pagoRepository.findByMembresiaId(membresiaId);
     }
 
-    // GET: buscar pagos por estado
     public List<Pago> buscarPorEstado(String estado) {
         return pagoRepository.findByEstado(EstadoPago.valueOf(estado.toUpperCase()));
     }
 
-    // GET: buscar pagos por método de pago
     public List<Pago> buscarPorMetodoPago(String metodoPago) {
         return pagoRepository.findByMetodoPagoIgnoreCase(metodoPago);
     }
 
-    // POST: guardar pago
     public Pago guardar(Pago pago) {
         return pagoRepository.save(pago);
     }
 
-    // POST: crear pago desde DTO
     public PagoResponseDTO crearPago(PagoRequestDTO dto) {
         Pago pago = new Pago();
 
@@ -72,12 +64,10 @@ public class PagoService {
         return response;
     }
 
-    // DELETE: eliminar pago
     public void eliminar(Long id) {
         pagoRepository.deleteById(id);
     }
 
-    // PUT: actualizar pago
     public Pago actualizar(Long id, Pago nuevoPago) {
         Pago pago = pagoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pago no encontrado"));

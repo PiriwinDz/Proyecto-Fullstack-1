@@ -7,8 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// DTO que transporta los datos que llegan del frontend al crear o editar una sede
-// no expone la entidad Sede directamente para proteger campos internos
+
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,7 +20,7 @@ public class SedeRequestDTO {
     @NotBlank(message = "La direccion es obligatoria")
     private String direccion;
 
-    private String horario; // campo opcional, puede llegar null
+    private String horario; 
 
     @NotNull(message = "La capacidad maxima es obligatoria")
     @Positive(message = "La capacidad maxima debe ser mayor a cero")

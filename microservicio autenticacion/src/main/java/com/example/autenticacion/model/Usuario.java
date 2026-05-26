@@ -11,47 +11,47 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Entity // le dice a JPA que esta clase es una tabla en la BD
-@Table(name = "usuarios") // nombre de la tabla en la BD
-@Data // genera getters, setters, toString automaticamente (Lombok)
-@NoArgsConstructor // genera constructor vacio requerido por JPA
-@AllArgsConstructor // genera constructor con todos los campos
-@Builder // permite crear objetos con el patron builder: Usuario.builder().nombre(...).build()
+@Entity 
+@Table(name = "usuarios") 
+@Data 
+@NoArgsConstructor 
+@AllArgsConstructor 
+@Builder 
 public class Usuario {
 
-    @Id // indica que este campo es la clave primaria
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // autoincremental en la BD
+    @Id 
+    @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private Long id;
-    // 1 postman
-    @NotBlank // no permite null ni vacio
-    @Column(nullable = false, length = 100) // columna obligatoria, maximo 100 caracteres
+    
+    @NotBlank 
+    @Column(nullable = false, length = 100) 
     private String nombre;
-    // 2 postman
-    @Email // valida que el formato sea correo@dominio.com
-    @NotBlank // no permite null ni vacio
-    @Column(unique = true, nullable = false) // no puede repetirse en la BD
+    
+    @Email 
+    @NotBlank 
+    @Column(unique = true, nullable = false) 
     private String correo;
-    // 3 postman
-    @NotBlank // no permite null ni vacio
-    @Column(nullable = false) // columna obligatoria en la BD
-    private String password; // se guarda encriptado con BCrypt, nunca en texto plano
-    // 4 postman
-    @Enumerated(EnumType.STRING) // guarda el nombre del enum como texto (ATLETA, TRABAJADOR...)
-    @NotNull // no permite null
-    @Column(nullable = false) // columna obligatoria en la BD
-    private RolUsuario rol; // define los permisos del usuario en el sistema
+    
+    @NotBlank 
+    @Column(nullable = false) 
+    private String password; 
+    
+    @Enumerated(EnumType.STRING) 
+    @NotNull 
+    @Column(nullable = false) 
+    private RolUsuario rol; 
 
-    @Column(nullable = false) // columna obligatoria en la BD
-    private Boolean activo; // permite desactivar un usuario sin borrarlo de la BD
+    @Column(nullable = false) 
+    private Boolean activo; 
 
-    private LocalDateTime creadoEn; // fecha y hora exacta en que se creo el usuario
+    private LocalDateTime creadoEn; 
 
-    @PrePersist // se ejecuta automaticamente antes de guardar en la BD
+    @PrePersist 
     public void prePersist() {
-        if (this.creadoEn == null) { // si no se asigno fecha, la asigna ahora
+        if (this.creadoEn == null) { 
             this.creadoEn = LocalDateTime.now();
         }
-        if (this.activo == null) { // si no se asigno activo, lo pone en true por defecto
+        if (this.activo == null) { 
             this.activo = true;
         }
     }
