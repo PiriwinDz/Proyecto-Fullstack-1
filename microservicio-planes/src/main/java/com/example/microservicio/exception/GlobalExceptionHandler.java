@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
                 .path(request.getRequestURI())
                 .build();
                 
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND); // 404
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND); 
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
                 .details(errors)
                 .build();
                 
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST); // 400
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST); 
     }
 
     @ExceptionHandler(Exception.class)
@@ -58,6 +58,6 @@ public class GlobalExceptionHandler {
                 .path(request.getRequestURI())
                 .build();
                 
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR); // 500
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR); 
     }
 }
