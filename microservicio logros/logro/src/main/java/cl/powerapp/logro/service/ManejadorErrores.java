@@ -1,6 +1,9 @@
 package cl.powerapp.logro.service;
 
 import cl.powerapp.logro.dto.ErrorDTO;
+import cl.powerapp.logro.exception.LogroNoEncontradoException;
+import cl.powerapp.logro.exception.LogroYaDesbloqueadoException;
+import cl.powerapp.logro.exception.UsuarioNoEncontradoException;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
@@ -58,5 +61,84 @@ public class ManejadorErrores {
         return ResponseEntity .status(HttpStatus.INTERNAL_SERVER_ERROR) 
         .body(errorDTO);
     }
+ 
+    @ExceptionHandler(LogroNoEncontradoException.class)
+    public ResponseEntity<ErrorDTO> manejarLogroNoEncontrado(
+                LogroNoEncontradoException ex,
+                HttpServletRequest request){
+
+        Map<String, String> errores =
+                new HashMap<>();
+
+        errores.put(
+                "logro",
+                ex.getMessage());
+
+        ErrorDTO errorDTO =
+                new ErrorDTO(
+                        LocalDateTime.now(),
+                        404,
+                        "Logro no encontrado",
+                        errores,
+                        request.getRequestURI()
+                );
+
+        return ResponseEntity.status(404).body(errorDTO);
+    }
+
+@ExceptionHandler(LogroYaDesbloqueadoException.class)
+
+    public ResponseEntity<ErrorDTO> manejarLogroDuplicado(
+            LogroYaDesbloqueadoException ex,
+            HttpServletRequest request){
+
+        Map<String, String> errores =
+                new HashMap<>();
+
+        errores.put(
+                "logro",
+                ex.getMessage());
+
+        ErrorDTO errorDTO =
+                new ErrorDTO(
+                        LocalDateTime.now(),
+                        409,
+                        "Logro ya desbloqueado",
+                        errores,
+                        request.getRequestURI()
+                );
+
+        return ResponseEntity
+                .status(409)
+                .body(errorDTO);
+    }
+
+@ExceptionHandler(UsuarioNoEncontradoException.class)
+
+    public ResponseEntity<ErrorDTO> manejarUsuarioNoEncontrado(
+            UsuarioNoEncontradoException ex,
+            HttpServletRequest request){
+
+        Map<String, String> errores =
+                new HashMap<>();
+
+        errores.put(
+                "usuario",
+                ex.getMessage());
+
+        ErrorDTO errorDTO =
+                new ErrorDTO(
+                        LocalDateTime.now(),
+                        404,
+                        "Usuario no encontrado",
+                        errores,
+                        request.getRequestURI()
+                );
+
+        return ResponseEntity
+                .status(404)
+                .body(errorDTO);
+    }
+
 }
 
