@@ -9,9 +9,9 @@ import lombok.Data;
 @Data
 @Builder
 public class ErrorDTOEstandar {
-    private LocalDateTime timestamp; // cuando paso 
-    private int codigo;  //codigo http
+    private LocalDateTime timestamp; 
+    private int codigo;  
     private String mensaje;
-    private String ruta; // que url fallo 
-    private Map<String, String> erroresValidacion; //
+    private String ruta;  
+    private Map<String, String> erroresValidacion; 
 }
