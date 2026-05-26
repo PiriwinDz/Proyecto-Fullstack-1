@@ -5,6 +5,9 @@ import cl.powerapp.logro.dto.DesbloquearLogroDTO;
 import cl.powerapp.logro.dto.LogroListadoDTO;
 import cl.powerapp.logro.dto.LogroSimpleDTO;
 import cl.powerapp.logro.dto.UsuarioLogrosDTO;
+import cl.powerapp.logro.exception.LogroNoEncontradoException;
+import cl.powerapp.logro.exception.LogroYaDesbloqueadoException;
+import cl.powerapp.logro.exception.UsuarioNoEncontradoException;
 import cl.powerapp.logro.model.Logro;
 import cl.powerapp.logro.model.LogroUsuario;
 import cl.powerapp.logro.model.Usuario;
@@ -13,6 +16,7 @@ import cl.powerapp.logro.repository.LogroUsuarioRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
@@ -34,14 +38,29 @@ public class LogroService {
         return repository.save(logro);
     }
 
+
     public LogroUsuario desbloquearLogro(DesbloquearLogroDTO dto){
 
-        Optional<Logro> optionalLogro = repository.findById(dto.getLogroId());
-        
+        Optional<Logro> optionalLogro =
+                repository.findById(dto.getLogroId());
+
         if(optionalLogro.isEmpty()){
 
-            throw new RuntimeException("Logro no encontrado");
-        }
+            throw new LogroNoEncontradoException(
+                    "El logro no existe");
+    }
+
+        boolean yaExiste =
+                logroUsuarioRepository
+                .existsByUsuarioIdAndLogroId(
+                        dto.getUsuarioId(),
+                        dto.getLogroId());
+
+        if(yaExiste){
+
+            throw new LogroYaDesbloqueadoException(
+                    "El usuario ya desbloqueó este logro");
+    }
 
         LogroUsuario nuevo = new LogroUsuario();
 
@@ -51,7 +70,6 @@ public class LogroService {
 
         return logroUsuarioRepository.save(nuevo);
     }
-    
 
     public List<LogroListadoDTO> listarDTO() {
 
@@ -72,9 +90,11 @@ public class LogroService {
 
     public LogroSimpleDTO obtenerDetalleSimple(Long id) {
 
-        Logro logro = repository.findById(id)
+
+            Logro logro = repository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Logro no encontrado"));
+                    new LogroNoEncontradoException(
+                    "El logro no existe"));
 
         return convertirSimpleDTO(logro);
     }
@@ -113,9 +133,11 @@ public class LogroService {
 
     public Logro actualizar(Long id, Logro logro) {
 
+
         Logro logroExistente = repository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Logro no encontrado"));
+                    .orElseThrow(() ->
+                        new LogroNoEncontradoException(
+                            "El logro no existe"));
 
         logroExistente.setNombre(logro.getNombre());
         logroExistente.setDescripcion(logro.getDescripcion());
@@ -137,9 +159,20 @@ public class LogroService {
 
         RestTemplate restTemplate = new RestTemplate();
 
-        String url = "http://localhost:8081/api/auth/usuarios/" + usuarioId;
+        String url =
+                "http://localhost:8089/auth/usuarios/"+ usuarioId;
 
-        return restTemplate.getForObject(url, Usuario.class);
+        try{
+
+            return restTemplate.getForObject(
+                    url,
+                    Usuario.class);
+
+        }catch(HttpClientErrorException.NotFound ex){
+
+            throw new UsuarioNoEncontradoException(
+                    "El usuario no existe");
+        }
     }
 
     public UsuarioLogrosDTO obtenerLogrosConUsuario(Long usuarioId){
