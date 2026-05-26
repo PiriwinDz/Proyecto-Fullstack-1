@@ -1,4 +1,4 @@
-// un Dto evita exponer la estructura interna ademas de mantener la independencia entre microservicios 
+
 package com.example.catalogo.dto;
 
 import jakarta.validation.constraints.NotBlank;
