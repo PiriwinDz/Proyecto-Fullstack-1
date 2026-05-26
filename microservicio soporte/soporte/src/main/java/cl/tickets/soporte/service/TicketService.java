@@ -2,11 +2,14 @@ package cl.tickets.soporte.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import cl.tickets.soporte.dto.TicketListadoDTO;
 import cl.tickets.soporte.dto.TicketSimpleDTO;
 import cl.tickets.soporte.dto.UsuarioTicketsDTO;
+import cl.tickets.soporte.exception.TicketNoEncontradoException;
+import cl.tickets.soporte.exception.UsuarioNoEncontradoException;
 import cl.tickets.soporte.model.TicketSoporte;
 import cl.tickets.soporte.model.Usuario;
 import cl.tickets.soporte.repository.TicketRepository;
@@ -50,20 +53,19 @@ public class TicketService {
         return resultado;
     }
 
-    public TicketSimpleDTO obtenerDetalleSimple(
-            Long id){
+    public TicketSimpleDTO obtenerDetalleSimple(Long id){
 
         TicketSoporte ticket =
-                repository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Ticket no encontrado"));
+            repository.findById(id)
+            .orElseThrow(() ->
+                    new TicketNoEncontradoException(
+                            "Ticket no encontrado"));
+
 
         return convertirSimpleDTO(ticket);
     }
 
-    public List<TicketListadoDTO> obtenerTicketsUsuario(
-            Long usuarioId){
+    public List<TicketListadoDTO> obtenerTicketsUsuario(Long usuarioId){
 
         List<TicketSoporte> tickets = repository.findByUsuarioId(usuarioId);
 
@@ -81,14 +83,24 @@ public class TicketService {
 
     public Usuario obtenerUsuario(Long usuarioId){
 
-        RestTemplate restTemplate =
-                new RestTemplate();
+        RestTemplate restTemplate = new RestTemplate();
 
-        String url ="http://localhost:8089/api/auth/usuarios/"+ usuarioId;
+        String url = "http://localhost:8089/auth/usuarios/"+ usuarioId;
 
-        return restTemplate.getForObject(url,Usuario.class);
+        try{
 
+            return restTemplate.getForObject(
+                    url,
+                    Usuario.class);
+
+        }catch(HttpClientErrorException.NotFound ex){
+
+            throw new UsuarioNoEncontradoException(
+                    "El usuario no existe");
+        }
     }
+
+
 
     public UsuarioTicketsDTO obtenerTicketsConUsuario(
             Long usuarioId){
@@ -108,11 +120,14 @@ public class TicketService {
 
     public TicketSoporte actualizar(Long id,TicketSoporte ticket){
 
+
         TicketSoporte existente =
-                repository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Ticket no encontrado"));
+            repository.findById(id)
+            .orElseThrow(() ->
+                    new TicketNoEncontradoException(
+                            "Ticket no encontrado"));
+
+
 
         existente.setTitulo(ticket.getTitulo());
 
@@ -126,10 +141,10 @@ public class TicketService {
     public void eliminar(Long id){
 
         TicketSoporte ticket =
-                repository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Ticket no encontrado"));
+            repository.findById(id)
+            .orElseThrow(() ->
+                    new TicketNoEncontradoException(
+                            "Ticket no encontrado"));
 
         repository.delete(ticket);
     }
@@ -155,5 +170,8 @@ public class TicketService {
         );
     }
 }
+
+
+
 
 
