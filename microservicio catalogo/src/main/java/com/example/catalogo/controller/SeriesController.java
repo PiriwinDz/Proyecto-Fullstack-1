@@ -22,7 +22,7 @@ public class SeriesController {
 
     @PostMapping
     public ResponseEntity<Series> registrar(@Valid @RequestBody SeriesDTO dto) {
-    //  el código 201 CREATED
+    
         return ResponseEntity.status(HttpStatus.CREATED).body(seriesService.registrarSerie(dto));
     }
 
@@ -30,12 +30,12 @@ public class SeriesController {
     public ResponseEntity<List<Series>> historial(@PathVariable Long id) {
         List<Series> series = seriesService.obtenerHistorialPorEjercicio(id);
         
-        //  204 NO CONTENT si la lista está vacía
+        
         if (series.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         
-        // 200 OK
+        
         return ResponseEntity.ok(series);
     }
 }
