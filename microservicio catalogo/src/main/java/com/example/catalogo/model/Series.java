@@ -25,7 +25,7 @@ public class Series {
 
     @Column(name= "fecha_hora")
     private LocalDateTime fechaHora;
-    // @PrePersist cuando esta todo correcto se ejecuta el siguiente metodo y @PreUpdate para que se vaya actualizando conforme se vayan cambiando los datos requeridos 
+     
     @PrePersist
     @PreUpdate
     public void calcularRm(){
