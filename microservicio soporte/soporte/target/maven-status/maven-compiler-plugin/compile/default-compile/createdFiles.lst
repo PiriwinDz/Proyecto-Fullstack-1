@@ -1,0 +1,11 @@
+cl\tickets\soporte\model\Usuario.class
+cl\tickets\soporte\model\TicketSoporte.class
+cl\tickets\soporte\dto\TicketListadoDTO.class
+cl\tickets\soporte\SoporteApplication.class
+cl\tickets\soporte\service\TicketService.class
+cl\tickets\soporte\dto\TicketSimpleDTO.class
+cl\tickets\soporte\dto\UsuarioTicketsDTO.class
+cl\tickets\soporte\controller\TicketController.class
+cl\tickets\soporte\repository\TicketRepository.class
+cl\tickets\soporte\service\ManejadorErrores.class
+cl\tickets\soporte\dto\ErrorDTO.class
