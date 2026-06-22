@@ -1,0 +1,43 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: ruta-logros
+              uri: lb://MICROSERVICIO-LOGROS
+              predicates:
+                - Path=/logros,/logros/**
+
+            - id: ruta-soporte
+              uri: lb://MICROSERVICIO-SOPORTE
+              predicates:
+                - Path=/tickets,/tickets/**
+
+            - id: ruta-usuarios
+              uri: lb://MICROSERVICIO-USUARIOS
+              predicates:
+                - Path=/usuarios,/usuarios/**
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+  instance:
+    prefer-ip-address: true
+    ip-address: 127.0.0.1
+    hostname: 127.0.0.1
+    instance-id: 127.0.0.1:${spring.application.name}:${server.port}
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
