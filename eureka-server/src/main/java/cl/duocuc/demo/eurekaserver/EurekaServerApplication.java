@@ -4,20 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 
-/**
- * ============================================================
- * EurekaServerApplication
- * ============================================================
- *
- * Que es Eureka?
- * Es el "directorio" de todos los microservicios del sistema.
- * Al arrancar, ms-productos y ms-clientes se registran aqui.
- * El API Gateway consulta este directorio para saber a donde
- * enviar cada peticion usando el nombre del servicio (lb://).
- *
- * @EnableEurekaServer: activa el servidor de registro.
- *   Sin esta anotacion, es una app Boot normal sin registro.
- */
+
 @SpringBootApplication
 @EnableEurekaServer
 public class EurekaServerApplication {
