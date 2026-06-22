@@ -1,7 +1,7 @@
 package com.powerApp.pagos.repository;
 
-import com.powerApp.pagos.model.Pago;
 import com.powerApp.pagos.model.EstadoPago;
+import com.powerApp.pagos.model.Pago;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +17,4 @@ public interface PagoRepository extends JpaRepository<Pago, Long> {
     List<Pago> findByEstado(EstadoPago estado);
 
     List<Pago> findByMetodoPagoIgnoreCase(String metodoPago);
-
-    List<Pago> findByReferenciaPasarelaContainingIgnoreCase(String referenciaPasarela);
 }

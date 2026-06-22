@@ -9,5 +9,4 @@ public class PagosApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PagosApplication.class, args);
 	}
-
 }

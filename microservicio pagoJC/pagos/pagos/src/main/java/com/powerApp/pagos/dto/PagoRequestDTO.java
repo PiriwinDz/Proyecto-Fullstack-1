@@ -1,20 +1,23 @@
 package com.powerApp.pagos.dto;
 
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+
 import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class PagoRequestDTO {
 
-    @NotNull(message = "El usuarioId es obligatorio")
+    @NotNull(message = "El ID del usuario es obligatorio")
     private Long usuarioId;
 
-    @NotNull(message = "La membresiaId es obligatoria")
+    @NotNull(message = "El ID de la membresía es obligatorio")
     private Long membresiaId;
 
     @NotNull(message = "El monto es obligatorio")
@@ -24,6 +27,5 @@ public class PagoRequestDTO {
     @NotBlank(message = "El método de pago es obligatorio")
     private String metodoPago;
 
-    @Size(max = 100, message = "La referencia no puede superar 100 caracteres")
     private String referenciaPasarela;
 }

@@ -1,89 +1,137 @@
 package com.powerApp.pagos.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.powerApp.pagos.dto.PagoRequestDTO;
 import com.powerApp.pagos.dto.PagoResponseDTO;
-import com.powerApp.pagos.model.Pago;
 import com.powerApp.pagos.model.EstadoPago;
+import com.powerApp.pagos.model.Pago;
 import com.powerApp.pagos.service.PagoService;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Arrays;
+import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(PagoController.class)
 @AutoConfigureMockMvc(addFilters = false)
-public class PagoControllerTest {
+class PagoControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+        @Autowired
+        private MockMvc mockMvc;
 
-    @MockBean
-    private PagoService pagoService;
+        @MockBean
+        private PagoService pagoService;
 
-    // ✅ Test GET: listar pagos
-    @Test
-    void listarPagos() throws Exception {
-        Pago pago = Pago.builder()
-                .id(1L)
-                .usuarioId(101L)
-                .membresiaId(202L)
-                .monto(new BigDecimal("5000.00"))
-                .estado(EstadoPago.APROBADO)
-                .metodoPago("TARJETA")
-                .referenciaPasarela("REF123")
-                .creadoEn(LocalDateTime.now())
-                .procesadoEn(LocalDateTime.now())
-                .build();
+        @Autowired
+        private ObjectMapper objectMapper;
 
-        List<Pago> pagos = List.of(pago);
+        private Pago pago;
 
-        when(pagoService.listar()).thenReturn(pagos);
+        @BeforeEach
+        void setUp() {
+                pago = Pago.builder()
+                                .id(1L)
+                                .usuarioId(10L)
+                                .membresiaId(20L)
+                                .monto(BigDecimal.valueOf(99.99))
+                                .estado(EstadoPago.PENDIENTE)
+                                .metodoPago("Tarjeta")
+                                .referenciaPasarela("REF123")
+                                .build();
+        }
 
-        mockMvc.perform(get("/pagos"))
-                .andExpect(status().isOk());
-    }
+        @Test
+        void testListarPagos() throws Exception {
+                Mockito.when(pagoService.listar()).thenReturn(Arrays.asList(pago));
 
-    // ✅ Test POST: crear pago
-    @Test
-    void crearPago() throws Exception {
-        String pagoJson = """
-                {
-                    "usuarioId": 101,
-                    "membresiaId": 202,
-                    "monto": 5000.00,
-                    "metodoPago": "TARJETA",
-                    "referenciaPasarela": "REF123"
-                }
-                """;
+                mockMvc.perform(get("/pagos"))
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$[0].id").value(pago.getId()))
+                                .andExpect(jsonPath("$[0].metodoPago").value(pago.getMetodoPago()));
+        }
 
-        PagoResponseDTO pagoCreado = new PagoResponseDTO(
-                1L,
-                101L,
-                202L,
-                new BigDecimal("5000.00"),
-                "APROBADO",
-                "TARJETA",
-                "REF123");
+        @Test
+        void testBuscarPorId() throws Exception {
+                Mockito.when(pagoService.buscarPorId(1L)).thenReturn(Optional.of(pago));
 
-        when(pagoService.crearPago(any(PagoRequestDTO.class))).thenReturn(pagoCreado);
+                mockMvc.perform(get("/pagos/1"))
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.id").value(pago.getId()))
+                                .andExpect(jsonPath("$.metodoPago").value(pago.getMetodoPago()));
+        }
 
-        mockMvc.perform(post("/pagos")
-                .contentType(APPLICATION_JSON)
-                .content(pagoJson))
-                .andExpect(status().isCreated());
-    }
+        @Test
+        void testCrearPago() throws Exception {
+                PagoRequestDTO requestDTO = PagoRequestDTO.builder()
+                                .usuarioId(10L)
+                                .membresiaId(20L)
+                                .monto(BigDecimal.valueOf(99.99))
+                                .metodoPago("Tarjeta")
+                                .referenciaPasarela("REF123")
+                                .build();
+
+                Mockito.when(pagoService.crearPago(Mockito.any(PagoRequestDTO.class)))
+                                .thenReturn(PagoResponseDTO.builder()
+                                                .id(1L)
+                                                .usuarioId(10L)
+                                                .membresiaId(20L)
+                                                .monto(BigDecimal.valueOf(99.99))
+                                                .estado("PENDIENTE")
+                                                .metodoPago("Tarjeta")
+                                                .referenciaPasarela("REF123")
+                                                .mensaje("Pago creado correctamente")
+                                                .build());
+
+                mockMvc.perform(post("/pagos")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(requestDTO)))
+                                .andExpect(status().isCreated())
+                                .andExpect(jsonPath("$.id").value(1L))
+                                .andExpect(jsonPath("$.mensaje").value("Pago creado correctamente"));
+        }
+
+        @Test
+        void testActualizarPago() throws Exception {
+                Pago nuevoPago = Pago.builder()
+                                .id(1L)
+                                .usuarioId(10L)
+                                .membresiaId(20L)
+                                .monto(BigDecimal.valueOf(120.00))
+                                .estado(EstadoPago.APROBADO)
+                                .metodoPago("Tarjeta")
+                                .referenciaPasarela("REF999")
+                                .build();
+
+                Mockito.when(pagoService.actualizar(Mockito.eq(1L), Mockito.any(Pago.class)))
+                                .thenReturn(nuevoPago);
+
+                mockMvc.perform(put("/pagos/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(nuevoPago)))
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.monto").value(120.00))
+                                .andExpect(jsonPath("$.estado").value("APROBADO"))
+                                .andExpect(jsonPath("$.referenciaPasarela").value("REF999"));
+        }
+
+        @Test
+        void testEliminarPago() throws Exception {
+                Mockito.doNothing().when(pagoService).eliminar(1L);
+
+                mockMvc.perform(delete("/pagos/1"))
+                                .andExpect(status().isOk())
+                                .andExpect(content().string("Pago eliminado correctamente"));
+        }
 }

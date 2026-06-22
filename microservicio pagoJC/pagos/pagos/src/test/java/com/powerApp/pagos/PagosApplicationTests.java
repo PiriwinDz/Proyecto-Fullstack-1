@@ -9,5 +9,4 @@ class PagosApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }

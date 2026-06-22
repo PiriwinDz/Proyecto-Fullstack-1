@@ -13,9 +13,9 @@ public class SwaggerConfig {
     public OpenAPI reseñasOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("API de Reseñas") // Nombre de la API que aparecerá en Swagger
-                        .description("API REST para la gestión de reseñas") // Descripción general del proyecto
-                        .version("1.0") // Versión de la API
+                        .title("API de Reseñas")
+                        .description("API REST para la gestión de reseñas")
+                        .version("1.0")
                         .contact(new Contact()
                                 .name("Coreplay")
                                 .email("soporte@coreplay.com")));
