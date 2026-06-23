@@ -18,7 +18,7 @@ public class Series {
     private Long id;
 
     @NotNull(message= "El id del ejercicio es obligatorio")
-    private Long EjercicioId;
+    private Long ejercicioId;
     private double peso;
     private int repeticiones;
     private double RmEstimado;

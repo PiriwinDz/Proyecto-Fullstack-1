@@ -10,7 +10,7 @@ import com.example.catalogo.model.Series;
 @Repository
 public interface SeriesRepository extends JpaRepository<Series, Long> {
 
-    List<Series> findByEjercicioId(Long EjercicioId);
+    List<Series> findByEjercicioId(Long ejercicioId);
     List<Series>findAllByOrderByFechaHoraDesc();
 
 }
