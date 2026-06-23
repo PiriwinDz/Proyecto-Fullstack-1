@@ -1,0 +1,13 @@
+C:\Users\Admin\Downloads\Proyecto-Fullstack-1-master\Proyecto-Fullstack-1-master\microservicio catalogo\src\main\java\com\example\catalogo\CatalogoApplication.java
+C:\Users\Admin\Downloads\Proyecto-Fullstack-1-master\Proyecto-Fullstack-1-master\microservicio catalogo\src\main\java\com\example\catalogo\controller\EjercicioController.java
+C:\Users\Admin\Downloads\Proyecto-Fullstack-1-master\Proyecto-Fullstack-1-master\microservicio catalogo\src\main\java\com\example\catalogo\controller\SeriesController.java
+C:\Users\Admin\Downloads\Proyecto-Fullstack-1-master\Proyecto-Fullstack-1-master\microservicio catalogo\src\main\java\com\example\catalogo\dto\EjercicioDTO.java
+C:\Users\Admin\Downloads\Proyecto-Fullstack-1-master\Proyecto-Fullstack-1-master\microservicio catalogo\src\main\java\com\example\catalogo\dto\ErrorDTOEstandar.java
+C:\Users\Admin\Downloads\Proyecto-Fullstack-1-master\Proyecto-Fullstack-1-master\microservicio catalogo\src\main\java\com\example\catalogo\dto\SeriesDTO.java
+C:\Users\Admin\Downloads\Proyecto-Fullstack-1-master\Proyecto-Fullstack-1-master\microservicio catalogo\src\main\java\com\example\catalogo\exception\GlobalExceptionHandler.java
+C:\Users\Admin\Downloads\Proyecto-Fullstack-1-master\Proyecto-Fullstack-1-master\microservicio catalogo\src\main\java\com\example\catalogo\model\Ejercicio.java
+C:\Users\Admin\Downloads\Proyecto-Fullstack-1-master\Proyecto-Fullstack-1-master\microservicio catalogo\src\main\java\com\example\catalogo\model\Series.java
+C:\Users\Admin\Downloads\Proyecto-Fullstack-1-master\Proyecto-Fullstack-1-master\microservicio catalogo\src\main\java\com\example\catalogo\repository\EjercicioRepository.java
+C:\Users\Admin\Downloads\Proyecto-Fullstack-1-master\Proyecto-Fullstack-1-master\microservicio catalogo\src\main\java\com\example\catalogo\repository\SeriesRepository.java
+C:\Users\Admin\Downloads\Proyecto-Fullstack-1-master\Proyecto-Fullstack-1-master\microservicio catalogo\src\main\java\com\example\catalogo\service\EjercicioService.java
+C:\Users\Admin\Downloads\Proyecto-Fullstack-1-master\Proyecto-Fullstack-1-master\microservicio catalogo\src\main\java\com\example\catalogo\service\SeriesService.java
