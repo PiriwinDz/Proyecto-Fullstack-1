@@ -11,7 +11,7 @@ spring:
     password: duocplazanorte
     driver-class-name: org.postgresql.Driver
     hikari:
-      maximum-pool-size: 2 # Limita a este microservicio a usar máximo 2 conexiones
+      maximum-pool-size: 1 # Limita a este microservicio a usar máximo 2 conexiones
       minimum-idle: 1      # Mantiene mínimo 1 conexión abierta
 
   jpa:

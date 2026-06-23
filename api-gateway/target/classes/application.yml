@@ -25,6 +25,38 @@ spring:
               predicates:
                 - Path=/auth/usuarios,/auth/usuarios/**
 
+            - id: ruta-alertas
+              uri: lb://MICROSERVICIO-alertas
+              predicates:
+                - Path=/api/v1/alertas,/api/v1/alertas/**
+
+            - id: ruta-ejercicios
+              uri: lb://MICROSERVICIO-CATALOGO
+              predicates:
+                - Path=/api/ejercicios,/api/ejercicios/**
+
+            - id: ruta-series
+              uri: lb://MICROSERVICIO-CATALOGO
+              predicates:
+                - Path=/api/series,/api/series/**
+
+            - id: ruta-planes
+              uri: lb://MICROSERVICIO-PLANES
+              predicates:
+                - Path=/api/planes,/api/planes/**
+            - id: ruta-sedes
+              uri: lb://MICROSERVICIO-SEDES
+              predicates:
+                - Path=/api/sedes,/api/sedes/**
+            - id: ruta-pagos
+              uri: lb://MICROSERVICIO-PAGOS
+              predicates:
+                - Path=/pagos,/pagos/**
+            - id: ruta-resenas
+              uri: lb://MICROSERVICIO-RESENAS
+              predicates:
+                - Path=/resenas,/resenas/**
+
 eureka:
   client:
     register-with-eureka: true
