@@ -23,7 +23,7 @@ spring:
             - id: ruta-usuarios
               uri: lb://MICROSERVICIO-USUARIOS
               predicates:
-                - Path=/usuarios,/usuarios/**
+                - Path=/auth/usuarios,/auth/usuarios/**
 
 eureka:
   client:
