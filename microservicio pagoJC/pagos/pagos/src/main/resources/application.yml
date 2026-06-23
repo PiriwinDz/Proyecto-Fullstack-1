@@ -1,8 +1,11 @@
 server:
   port: 8088
-
+  
 spring:
-  # Solución al error de duplicidad de beans (restClientSsl)
+  application:
+    name: microservicio-pagos
+
+
   main:
     allow-bean-definition-overriding: true
 
@@ -21,8 +24,7 @@ spring:
     show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
-# Swagger OpenAPI
-# http://localhost:8088/swagger-ui/index.html
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
