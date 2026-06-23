@@ -40,13 +40,13 @@ class EjercicioServiceTest {
 
     @Test
     void testGuardarEjercicio() {
-        // Arrange
+        
         when(ejercicioRepository.save(any(Ejercicio.class))).thenReturn(ejercicio);
 
-        // Act
+        
         Ejercicio resultado = ejercicioService.guardarEjercicio(ejercicioDTO);
 
-        // Assert
+        
         assertNotNull(resultado);
         assertEquals("Press de Banca", resultado.getNombre());
         verify(ejercicioRepository).save(any(Ejercicio.class)); // Verifica que el método save fue llamado
@@ -54,13 +54,13 @@ class EjercicioServiceTest {
 
     @Test
     void testListarTodo_ConResultados() {
-        // Arrange
+        
         when(ejercicioRepository.findAll()).thenReturn(List.of(ejercicio));
 
-        // Act
+        
         List<Ejercicio> resultados = ejercicioService.listarTodo();
 
-        // Assert
+        
         assertNotNull(resultados);
         assertEquals(1, resultados.size());
         assertEquals("Press de Banca", resultados.get(0).getNombre());
@@ -68,13 +68,13 @@ class EjercicioServiceTest {
 
     @Test
     void testListarTodo_Vacio() {
-        // Arrange
+        
         when(ejercicioRepository.findAll()).thenReturn(Collections.emptyList());
 
-        // Act
+       
         List<Ejercicio> resultados = ejercicioService.listarTodo();
 
-        // Assert
+       
         assertNotNull(resultados);
         assertTrue(resultados.isEmpty());
     }
@@ -82,26 +82,26 @@ class EjercicioServiceTest {
 
     @Test
     void testBuscarPorId_Encontrado() {
-        // Arrange
+       
         when(ejercicioRepository.findById(1L)).thenReturn(Optional.of(ejercicio));
 
-        // Act
+        
         Optional<Ejercicio> resultado = ejercicioService.buscarPorId(1L);
 
-        // Assert
+        
         assertTrue(resultado.isPresent());
         assertEquals("Press de Banca", resultado.get().getNombre());
     }
 
     @Test
     void testBuscarPorId_NoEncontrado() {
-        // Arrange
+        
         when(ejercicioRepository.findById(99L)).thenReturn(Optional.empty());
 
-        // Act
+        
         Optional<Ejercicio> resultado = ejercicioService.buscarPorId(99L);
 
-        // Assert
+        
         assertFalse(resultado.isPresent());
     }
 }

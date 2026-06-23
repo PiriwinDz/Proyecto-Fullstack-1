@@ -45,10 +45,10 @@ class EjercicioControllerTest {
 
     @Test
     void testCrearEjercicio() throws Exception {
-        // Arrange
+        
         when(ejercicioService.guardarEjercicio(any(EjercicioDTO.class))).thenReturn(ejercicio);
 
-        // Act & Assert
+        
         mockMvc.perform(post("/api/ejercicios")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(ejercicioDTO)))
@@ -59,10 +59,10 @@ class EjercicioControllerTest {
 
     @Test
     void testListarTodo() throws Exception {
-        // Arrange
+        
         when(ejercicioService.listarTodo()).thenReturn(List.of(ejercicio));
 
-        // Act & Assert
+       
         mockMvc.perform(get("/api/ejercicios"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -71,10 +71,10 @@ class EjercicioControllerTest {
 
     @Test
     void testBuscarPorId_Encontrado() throws Exception {
-        // Arrange
+        
         when(ejercicioService.buscarPorId(1L)).thenReturn(Optional.of(ejercicio));
 
-        // Act & Assert
+        
         mockMvc.perform(get("/api/ejercicios/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
@@ -83,10 +83,10 @@ class EjercicioControllerTest {
 
     @Test
     void testBuscarPorId_NoEncontrado() throws Exception {
-        // Arrange
+        
         when(ejercicioService.buscarPorId(99L)).thenReturn(Optional.empty());
 
-        // Act & Assert
+        
         mockMvc.perform(get("/api/ejercicios/99"))
                 .andExpect(status().isNotFound());
     }
