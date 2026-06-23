@@ -14,7 +14,7 @@ public class EjercicioDTO {
     @NotBlank(message= "El Nombre no puede estar vacio")
     private String nombre;
     @NotBlank(message= "El Grupo muscular no puede estar vacio")
-    private String GrupoMuscular;
+    private String grupoMuscular;
     
     private String descripcion;
 }

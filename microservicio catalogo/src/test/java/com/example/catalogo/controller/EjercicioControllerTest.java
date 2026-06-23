@@ -12,10 +12,10 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import com.example.catalogo.dto.EjercicioDTO;
 import com.example.catalogo.model.Ejercicio;
@@ -28,7 +28,7 @@ class EjercicioControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private EjercicioService ejercicioService;
 
     @Autowired
@@ -53,7 +53,7 @@ class EjercicioControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(ejercicioDTO)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.ejercicioId", is(1)))
                 .andExpect(jsonPath("$.nombre", is("Press de Banca")));
     }
 
@@ -77,7 +77,7 @@ class EjercicioControllerTest {
         
         mockMvc.perform(get("/api/ejercicios/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.ejercicioId", is(1)))
                 .andExpect(jsonPath("$.nombre", is("Press de Banca")));
     }
 
