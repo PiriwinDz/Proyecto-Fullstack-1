@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/planes")
 @RequiredArgsConstructor
-@Tag(name = "Gestión de Planes", description = "Operaciones CRUD para la gestión de planes de entrenamiento.")
+@Tag(name = "Gestión de Planes", description = "Operaciones para la gestión de planes de entrenamiento.")
 public class PlanController {
 
     private final PlanService planService;
