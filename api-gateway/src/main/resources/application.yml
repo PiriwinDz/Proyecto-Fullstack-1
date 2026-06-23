@@ -28,7 +28,7 @@ spring:
             - id: ruta-alertas
               uri: lb://MICROSERVICIO-alertas
               predicates:
-                - Path=/alertas,/alertas/**
+                - Path=/api/v1/alertas,/api/v1/alertas/**
 
             - id: ruta-ejercicios
               uri: lb://MICROSERVICIO-CATALOGO
