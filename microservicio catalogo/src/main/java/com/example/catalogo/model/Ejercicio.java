@@ -18,7 +18,7 @@ public class Ejercicio {
     
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long id;
+    private Long EjercicioId;
 
     @NotNull(message= "El nombre es obligatorio")
     @Column(nullable = false)
