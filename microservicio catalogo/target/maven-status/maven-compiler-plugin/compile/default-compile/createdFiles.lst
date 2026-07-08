@@ -1,0 +1,17 @@
+com\example\catalogo\service\EjercicioService.class
+com\example\catalogo\model\Ejercicio$EjercicioBuilder.class
+com\example\catalogo\model\Series$SeriesBuilder.class
+com\example\catalogo\dto\ErrorDTOEstandar.class
+com\example\catalogo\repository\EjercicioRepository.class
+com\example\catalogo\CatalogoApplication.class
+com\example\catalogo\dto\ErrorDTOEstandar$ErrorDTOEstandarBuilder.class
+com\example\catalogo\dto\EjercicioDTO.class
+com\example\catalogo\model\Series.class
+com\example\catalogo\controller\SeriesController.class
+com\example\catalogo\repository\SeriesRepository.class
+com\example\catalogo\service\SeriesService.class
+com\example\catalogo\controller\EjercicioController.class
+com\example\catalogo\model\Ejercicio.class
+com\example\catalogo\dto\SeriesDTO.class
+com\example\catalogo\swagger\SwaggerConfig.class
+com\example\catalogo\exception\GlobalExceptionHandler.class

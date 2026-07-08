@@ -1,0 +1,3 @@
+com\example\alertas\AlertasApplicationTests.class
+com\example\alertas\controller\AlertaControllerTest.class
+com\example\alertas\service\AlertaServiceTest.class

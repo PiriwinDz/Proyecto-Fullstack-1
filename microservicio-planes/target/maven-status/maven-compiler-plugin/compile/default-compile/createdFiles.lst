@@ -2,7 +2,6 @@ com\example\microservicio\service\PlanService.class
 com\example\microservicio\model\Plan.class
 com\example\microservicio\dto\PlanResponseDTO$PlanResponseDTOBuilder.class
 com\example\microservicio\controller\PlanController.class
-com\example\microservicio\planes\MicroservicioPlanesApplication.class
 com\example\microservicio\dto\ErrorResponseDTO$ErrorResponseDTOBuilder.class
 com\example\microservicio\exception\ResourceNotFoundException.class
 com\example\microservicio\dto\ErrorResponseDTO.class
@@ -10,4 +9,6 @@ com\example\microservicio\dto\PlanRequestDTO.class
 com\example\microservicio\repository\PlanRepository.class
 com\example\microservicio\dto\PlanResponseDTO.class
 com\example\microservicio\exception\GlobalExceptionHandler.class
+com\example\microservicio\MicroservicioPlanesApplication.class
 com\example\microservicio\model\Plan$PlanBuilder.class
+com\example\microservicio\swagger\SwaggerConfig.class

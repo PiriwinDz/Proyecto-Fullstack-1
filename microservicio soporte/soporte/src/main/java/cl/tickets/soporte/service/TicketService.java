@@ -85,7 +85,7 @@ public class TicketService {
 
         RestTemplate restTemplate = new RestTemplate();
 
-        String url = "http://localhost:8089/auth/usuarios/"+ usuarioId;
+        String url = "http://MICROSERVICIO-USUARIOS/auth/usuarios/"+ usuarioId;
 
         try{
 

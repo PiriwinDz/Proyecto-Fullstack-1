@@ -70,11 +70,12 @@
         </dependency>
 
         <!-- LOMBOK -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
+		<dependency>
+    			<groupId>org.projectlombok</groupId>
+    			<artifactId>lombok</artifactId>
+    			<version>1.18.38</version>
+    			<scope>provided</scope>
+		</dependency>
 
         <!-- TEST -->
         <dependency>
@@ -109,21 +110,20 @@
 
             <!-- COMPILER -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>21</source>
-                    <target>21</target>
+    			<groupId>org.apache.maven.plugins</groupId>
+    			<artifactId>maven-compiler-plugin</artifactId>
+    			<configuration>
+        			<release>21</release>
+        			<annotationProcessorPaths>
+            			<path>
+                			<groupId>org.projectlombok</groupId>
+                			<artifactId>lombok</artifactId>
+                			<version>1.18.38</version>
+            			</path>
+        			</annotationProcessorPaths>
+    			</configuration>
+			</plugin>
 
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>1.18.34</version>
-                        </path>
-                    </annotationProcessorPaths>
-                </configuration>
-            </plugin>
 
         </plugins>
     </build>

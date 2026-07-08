@@ -1,0 +1,126 @@
+version: '3.9'
+
+services:
+
+  eureka-server:
+    build: ./eureka-server
+    image: eureka-server:latest
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - powerapp-network
+
+  api-gateway:
+    build: ./api-gateway
+    image: api-gateway:latest
+    container_name: api-gateway
+    ports:
+      - "8090:8090"
+    depends_on:
+      - eureka-server
+    networks:
+      - powerapp-network
+
+  microservicio-autenticacion:
+    build: ./microservicio autenticacion
+    image: microservicio-autenticacion:latest
+    container_name: microservicio-autenticacion
+    ports:
+      - "8089:8089"
+    depends_on:
+      - eureka-server
+    networks:
+      - powerapp-network
+
+  microservicio-logros:
+    build: ./microservicio logros/logro
+    image: microservicio-logros:latest
+    container_name: microservicio-logros
+    ports:
+      - "8091:8091"
+    depends_on:
+      - eureka-server
+    networks:
+      - powerapp-network
+
+  microservicio-catalogo:
+    build: ./microservicio catalogo
+    image: microservicio-catalogo:latest
+    container_name: microservicio-catalogo
+    ports:
+      - "8085:8085"
+    depends_on:
+      - eureka-server
+    networks:
+      - powerapp-network
+
+  microservicio-soporte:
+    build: ./microservicio soporte/soporte
+    image: microservicio-soporte:latest
+    container_name: microservicio-soporte
+    ports:
+      - "8083:8083"
+    depends_on:
+      - eureka-server
+    networks:
+      - powerapp-network
+
+  microservicio-alertas:
+    build: ./microservicio alertas
+    image: microservicio-alertas:latest
+    container_name: microservicio-alertas
+    ports:
+      - "8092:8092"
+    depends_on:
+      - eureka-server
+    networks:
+      - powerapp-network
+
+  microservicio-pagos:
+    build: ./microservicio pagoJC/pagos/pagos
+    image: microservicio-pagos:latest
+    container_name: microservicio-pagos
+    ports:
+      - "8088:8088"
+    depends_on:
+      - eureka-server
+    networks:
+      - powerapp-network
+
+  microservicio-planes:
+    build: ./microservicio-planes
+    image: microservicio-planes:latest
+    container_name: microservicio-planes
+    ports:
+      - "8082:8082"
+    depends_on:
+      - eureka-server
+    networks:
+      - powerapp-network
+
+  microservicio-resenas:
+    build: ./microservicio resena
+    image: microservicio-resenas:latest
+    container_name: microservicio-resenas
+    ports:
+      - "8087:8087"
+    depends_on:
+      - eureka-server
+    networks:
+      - powerapp-network
+
+  microservicio-sedes:
+    build: ./microservicio sede
+    image: microservicio-sedes:latest
+    container_name: microservicio-sedes
+    ports:
+      - "8086:8086"
+    depends_on:
+      - eureka-server
+    networks:
+      - powerapp-network
+
+networks:
+  powerapp-network:
+    driver: bridge
