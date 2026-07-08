@@ -1,0 +1,75 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: ruta-logros
+              uri: lb://MICROSERVICIO-LOGROS
+              predicates:
+                - Path=/logros,/logros/**
+
+            - id: ruta-soporte
+              uri: lb://MICROSERVICIO-SOPORTE
+              predicates:
+                - Path=/tickets,/tickets/**
+
+            - id: ruta-usuarios
+              uri: lb://MICROSERVICIO-USUARIOS
+              predicates:
+                - Path=/auth/usuarios,/auth/usuarios/**
+
+            - id: ruta-alertas
+              uri: lb://MICROSERVICIO-alertas
+              predicates:
+                - Path=/api/v1/alertas,/api/v1/alertas/**
+
+            - id: ruta-ejercicios
+              uri: lb://MICROSERVICIO-CATALOGO
+              predicates:
+                - Path=/api/ejercicios,/api/ejercicios/**
+
+            - id: ruta-series
+              uri: lb://MICROSERVICIO-CATALOGO
+              predicates:
+                - Path=/api/series,/api/series/**
+
+            - id: ruta-planes
+              uri: lb://MICROSERVICIO-PLANES
+              predicates:
+                - Path=/api/planes,/api/planes/**
+            - id: ruta-sedes
+              uri: lb://MICROSERVICIO-SEDES
+              predicates:
+                - Path=/api/sedes,/api/sedes/**
+            - id: ruta-pagos
+              uri: lb://MICROSERVICIO-PAGOS
+              predicates:
+                - Path=/pagos,/pagos/**
+            - id: ruta-resenas
+              uri: lb://MICROSERVICIO-RESENAS
+              predicates:
+                - Path=/resenas,/resenas/**
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+  instance:
+    prefer-ip-address: true
+    ip-address: 127.0.0.1
+    hostname: 127.0.0.1
+    instance-id: 127.0.0.1:${spring.application.name}:${server.port}
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
