@@ -19,18 +19,15 @@ public class AlertaResponseDTO {
     
     private Long id;
 
-    
+    private Long usuarioId;
+
     private String titulo;
 
-    
     private String mensaje;
 
-    
     private String tipo;
 
-    
     private Boolean activa;
 
-    
     private LocalDateTime creadaEn;
 }

@@ -1,11 +1,16 @@
+com\example\alertas\dto\ErrorDTO$ErrorDTOBuilder.class
 com\example\alertas\AlertasApplication.class
 com\example\alertas\dto\AlertaRequestDTO.class
+com\example\alertas\dto\UsuarioDTO$UsuarioDTOBuilder.class
+com\example\alertas\exception\UsuarioNoEncontradoException.class
 com\example\alertas\swagger\SwaggerConfig.class
 com\example\alertas\exception\ManejadorErrores.class
 com\example\alertas\controller\AlertaController.class
 com\example\alertas\dto\AlertaResponseDTO.class
 com\example\alertas\repository\AlertaRepository.class
 com\example\alertas\dto\AlertaResponseDTO$AlertaResponseDTOBuilder.class
+com\example\alertas\config\RestTemplateConfig.class
+com\example\alertas\dto\UsuarioDTO.class
 com\example\alertas\exception\AlertaNoEncontradaException.class
 com\example\alertas\service\AlertaService.class
 com\example\alertas\dto\ErrorDTO.class

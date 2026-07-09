@@ -25,61 +25,86 @@ public class AlertaController {
     private final AlertaService alertaService;
 
     @Operation(
-        summary = "Listar alertas",
-        description = "Obtiene todas las alertas activas registradas en el sistema"
+            summary = "Listar alertas",
+            description = "Obtiene todas las alertas registradas en el sistema."
     )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Listado obtenido correctamente"),
-        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+            @ApiResponse(responseCode = "200", description = "Listado obtenido correctamente"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @GetMapping
     public ResponseEntity<List<AlertaResponseDTO>> listar() {
-        return ResponseEntity.ok(alertaService.listar());
+
+        List<AlertaResponseDTO> alertas = alertaService.listar();
+
+        return ResponseEntity.ok(alertas);
     }
 
     @Operation(
-        summary = "Buscar alerta por ID",
-        description = "Obtiene la información detallada de una alerta mediante su identificador"
+            summary = "Buscar alerta por ID",
+            description = "Obtiene una alerta mediante su identificador."
     )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Alerta encontrada"),
-        @ApiResponse(responseCode = "404", description = "Alerta no encontrada"),
-        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+            @ApiResponse(responseCode = "200", description = "Alerta encontrada"),
+            @ApiResponse(responseCode = "404", description = "Alerta no encontrada")
     })
     @GetMapping("/{id}")
     public ResponseEntity<AlertaResponseDTO> buscarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(alertaService.buscarPorId(id));
+
+        AlertaResponseDTO alerta = alertaService.buscarPorId(id);
+
+        return ResponseEntity.ok(alerta);
     }
 
     @Operation(
-        summary = "Crear alerta",
-        description = "Permite registrar una nueva alerta para ser gestionada por el sistema"
+            summary = "Crear alerta",
+            description = "Registra una nueva alerta."
     )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Alerta creada correctamente"),
-        @ApiResponse(responseCode = "400", description = "Datos inválidos"),
-        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+            @ApiResponse(responseCode = "201", description = "Alerta creada correctamente"),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos")
     })
     @PostMapping
-    public ResponseEntity<AlertaResponseDTO> crear(
-            @Valid @RequestBody AlertaRequestDTO dto) {
+    public ResponseEntity<AlertaResponseDTO> crear(@Valid @RequestBody AlertaRequestDTO dto) {
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(alertaService.crear(dto));
+        AlertaResponseDTO alerta = alertaService.crear(dto);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(alerta);
     }
 
     @Operation(
-        summary = "Desactivar alerta",
-        description = "Permite desactivar una alerta existente mediante su identificador"
+            summary = "Actualizar alerta",
+            description = "Actualiza una alerta existente."
     )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Alerta desactivada correctamente"),
-        @ApiResponse(responseCode = "404", description = "Alerta no encontrada"),
-        @ApiResponse(responseCode = "400", description = "La alerta ya se encuentra desactivada"),
-        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+            @ApiResponse(responseCode = "200", description = "Alerta actualizada correctamente"),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos"),
+            @ApiResponse(responseCode = "404", description = "Alerta no encontrada")
     })
-    @PutMapping("/{id}/desactivar")
-    public ResponseEntity<AlertaResponseDTO> desactivar(@PathVariable Long id) {
-        return ResponseEntity.ok(alertaService.desactivar(id));
+    @PutMapping("/{id}")
+    public ResponseEntity<AlertaResponseDTO> actualizar(
+            @PathVariable Long id,
+            @Valid @RequestBody AlertaRequestDTO dto) {
+
+        AlertaResponseDTO alerta = alertaService.actualizar(id, dto);
+
+        return ResponseEntity.ok(alerta);
     }
+
+    @Operation(
+            summary = "Eliminar alerta",
+            description = "Elimina una alerta del sistema."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Alerta eliminada correctamente"),
+            @ApiResponse(responseCode = "404", description = "Alerta no encontrada")
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+
+        alertaService.eliminar(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
 }

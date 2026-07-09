@@ -1,0 +1,10 @@
+com\powerapp\resenas\dto\ResenaResponseDTO.class
+com\powerapp\resenas\ResenasApplication.class
+com\powerapp\resenas\model\Resena$ResenaBuilder.class
+com\powerapp\resenas\security\Seguridad.class
+com\powerapp\resenas\service\ResenaService.class
+com\powerapp\resenas\dto\ResenaRequestDTO.class
+com\powerapp\resenas\model\Resena.class
+com\powerapp\resenas\controller\ResenaController.class
+com\powerapp\resenas\repository\ResenaRepository.class
+com\powerapp\resenas\swagger\SwaggerConfig.class
