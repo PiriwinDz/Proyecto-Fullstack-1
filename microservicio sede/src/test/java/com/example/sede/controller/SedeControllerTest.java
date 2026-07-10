@@ -2,8 +2,10 @@ package com.example.sede.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -35,18 +37,17 @@ public class SedeControllerTest {
     void listarSedes() throws Exception {
 
         List<SedeResponseDTO> sedes = List.of(
-            SedeResponseDTO.builder()
-                .id(1L)
-                .nombre("Sede Central")
-                .direccion("Santiago")
-                .horario("08:00-22:00")
-                .capacidadMaxima(100)
-                .ocupacionActual(20)
-                .porcentajeOcupacion(20)
-                .activo(true)
-                .creadoEn(LocalDateTime.now())
-                .build()
-        );
+                SedeResponseDTO.builder()
+                        .id(1L)
+                        .nombre("Sede Central")
+                        .direccion("Santiago")
+                        .horario("08:00-22:00")
+                        .capacidadMaxima(100)
+                        .ocupacionActual(20)
+                        .porcentajeOcupacion(20)
+                        .activo(true)
+                        .creadoEn(LocalDateTime.now())
+                        .build());
 
         when(service.listar()).thenReturn(sedes);
 
@@ -72,13 +73,13 @@ public class SedeControllerTest {
     void crearSede() throws Exception {
 
         String sedeJson = """
-            {
-                "nombre":"Sede Central",
-                "direccion":"Santiago",
-                "horario":"08:00-22:00",
-                "capacidadMaxima":100
-            }
-            """;
+                {
+                    "nombre":"Sede Central",
+                    "direccion":"Santiago",
+                    "horario":"08:00-22:00",
+                    "capacidadMaxima":100
+                }
+                """;
 
         SedeResponseDTO sede = SedeResponseDTO.builder()
                 .id(1L)
@@ -97,13 +98,13 @@ public class SedeControllerTest {
     void actualizarSede() throws Exception {
 
         String sedeJson = """
-            {
-                "nombre":"Sede Actualizada",
-                "direccion":"Providencia",
-                "horario":"09:00-21:00",
-                "capacidadMaxima":150
-            }
-            """;
+                {
+                    "nombre":"Sede Actualizada",
+                    "direccion":"Providencia",
+                    "horario":"09:00-21:00",
+                    "capacidadMaxima":150
+                }
+                """;
 
         SedeResponseDTO sede = SedeResponseDTO.builder()
                 .id(1L)
@@ -150,17 +151,11 @@ public class SedeControllerTest {
     }
 
     @Test
-    void desactivarSede() throws Exception {
+    void eliminarSede() throws Exception {
 
-        SedeResponseDTO sede = SedeResponseDTO.builder()
-                .id(1L)
-                .activo(false)
-                .build();
+        doNothing().when(service).eliminar(anyLong());
 
-        when(service.desactivar(anyLong()))
-                .thenReturn(sede);
-
-        mockMvc.perform(put("/api/sedes/1/desactivar"))
-                .andExpect(status().isOk());
+        mockMvc.perform(delete("/api/sedes/1"))
+                .andExpect(status().isNoContent());
     }
 }

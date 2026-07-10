@@ -9,109 +9,107 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
-@Service 
-@RequiredArgsConstructor 
+@Service
+@RequiredArgsConstructor
 public class SedeService {
 
-    private final SedeRepository sedeRepository; 
+    private final SedeRepository sedeRepository;
 
-    
     public List<SedeResponseDTO> listar() {
-        return sedeRepository.findByActivoTrue() 
-                .stream()
-                .map(this::convertirADTO) 
-                .toList();
+
+        List<Sede> sedes = sedeRepository.findByActivoTrue();
+        List<SedeResponseDTO> respuesta = new ArrayList<>();
+
+        for (Sede sede : sedes) {
+            respuesta.add(convertirADTO(sede));
+        }
+
+        return respuesta;
     }
 
-    
     public SedeResponseDTO buscarPorId(Long id) {
-        Sede sede = sedeRepository.findById(id)
-                .orElseThrow(() -> new SedeNoEncontradaException(id)); 
-        return convertirADTO(sede);
+        return convertirADTO(buscarSedePorId(id));
     }
 
-    
     public SedeResponseDTO crear(SedeRequestDTO dto) {
+
         Sede sede = Sede.builder()
                 .nombre(dto.getNombre())
                 .direccion(dto.getDireccion())
                 .horario(dto.getHorario())
                 .capacidadMaxima(dto.getCapacidadMaxima())
-                .ocupacionActual(0) 
+                .ocupacionActual(0)
                 .activo(true)
-                .creadoEn(LocalDateTime.now()) 
+                .creadoEn(LocalDateTime.now())
                 .build();
 
-        Sede guardada = sedeRepository.save(sede); 
-        return convertirADTO(guardada);
+        return convertirADTO(sedeRepository.save(sede));
     }
 
-    
     public SedeResponseDTO actualizar(Long id, SedeRequestDTO dto) {
-        Sede sede = sedeRepository.findById(id)
-                .orElseThrow(() -> new SedeNoEncontradaException(id)); 
 
-        
+        Sede sede = buscarSedePorId(id);
+
         sede.setNombre(dto.getNombre());
         sede.setDireccion(dto.getDireccion());
         sede.setHorario(dto.getHorario());
         sede.setCapacidadMaxima(dto.getCapacidadMaxima());
 
-        sedeRepository.save(sede); 
-        return convertirADTO(sede);
+        return convertirADTO(sedeRepository.save(sede));
     }
 
-    
     public SedeResponseDTO registrarEntrada(Long id) {
-        Sede sede = sedeRepository.findById(id)
-                .orElseThrow(() -> new SedeNoEncontradaException(id));
 
-        
+        Sede sede = buscarSedePorId(id);
+
         if (sede.getOcupacionActual() >= sede.getCapacidadMaxima()) {
-            throw new IllegalArgumentException("La sede esta en su capacidad maxima, no se permiten mas entradas");
+            throw new IllegalArgumentException(
+                    "La sede alcanzó su capacidad máxima.");
         }
 
-        sede.setOcupacionActual(sede.getOcupacionActual() + 1); 
-        sedeRepository.save(sede); 
-        return convertirADTO(sede);
+        sede.setOcupacionActual(sede.getOcupacionActual() + 1);
+
+        return convertirADTO(sedeRepository.save(sede));
     }
 
-    
     public SedeResponseDTO registrarSalida(Long id) {
-        Sede sede = sedeRepository.findById(id)
-                .orElseThrow(() -> new SedeNoEncontradaException(id));
 
-        
+        Sede sede = buscarSedePorId(id);
+
         if (sede.getOcupacionActual() <= 0) {
-            throw new IllegalArgumentException("La ocupacion de la sede ya esta en cero, no se puede decrementar");
+            throw new IllegalArgumentException(
+                    "La ocupación actual ya es cero.");
         }
 
-        sede.setOcupacionActual(sede.getOcupacionActual() - 1); 
-        sedeRepository.save(sede); 
-        return convertirADTO(sede);
+        sede.setOcupacionActual(sede.getOcupacionActual() - 1);
+
+        return convertirADTO(sedeRepository.save(sede));
     }
 
-    
-    public SedeResponseDTO desactivar(Long id) {
-        Sede sede = sedeRepository.findById(id)
+    public void eliminar(Long id) {
+
+        Sede sede = buscarSedePorId(id);
+
+        sedeRepository.delete(sede);
+    }
+
+    private Sede buscarSedePorId(Long id) {
+
+        return sedeRepository.findById(id)
                 .orElseThrow(() -> new SedeNoEncontradaException(id));
-
-        if (!sede.getActivo()) { 
-            throw new IllegalArgumentException("La sede ya esta desactivada");
-        }
-
-        sede.setActivo(false); 
-        sedeRepository.save(sede); 
-        return convertirADTO(sede);
     }
 
-    
-    
     private SedeResponseDTO convertirADTO(Sede sede) {
-        
-        int porcentaje = (sede.getOcupacionActual() * 100) / sede.getCapacidadMaxima();
+
+        int porcentaje = 0;
+
+        if (sede.getCapacidadMaxima() > 0) {
+            porcentaje = (sede.getOcupacionActual() * 100)
+                    / sede.getCapacidadMaxima();
+        }
 
         return SedeResponseDTO.builder()
                 .id(sede.getId())
@@ -120,7 +118,7 @@ public class SedeService {
                 .horario(sede.getHorario())
                 .capacidadMaxima(sede.getCapacidadMaxima())
                 .ocupacionActual(sede.getOcupacionActual())
-                .porcentajeOcupacion(porcentaje) 
+                .porcentajeOcupacion(porcentaje)
                 .activo(sede.getActivo())
                 .creadoEn(sede.getCreadoEn())
                 .build();

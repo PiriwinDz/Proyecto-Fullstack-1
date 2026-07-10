@@ -1,7 +1,5 @@
 package com.example.sede.exception;
 
-
-
 public class SedeNoEncontradaException extends RuntimeException {
 
     
