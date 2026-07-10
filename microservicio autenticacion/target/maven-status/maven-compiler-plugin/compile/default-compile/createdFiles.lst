@@ -1,5 +1,8 @@
+com\example\autenticacion\exception\CorreoYaRegistradoException.class
+com\example\autenticacion\exception\CredencialesInvalidasException.class
 com\example\autenticacion\model\RolUsuario.class
 com\example\autenticacion\model\Usuario$UsuarioBuilder.class
+com\example\autenticacion\securityConfig\SecurityConfig.class
 com\example\autenticacion\model\Usuario.class
 com\example\autenticacion\dto\ErrorDTO.class
 com\example\autenticacion\dto\LoginRequestDTO.class
@@ -7,6 +10,7 @@ com\example\autenticacion\repository\UsuarioRepository.class
 com\example\autenticacion\exception\ManejadorErrores.class
 com\example\autenticacion\dto\RegisterRequestDTO.class
 com\example\autenticacion\service\AutenticacionService.class
+com\example\autenticacion\dto\ActualizarUsuarioDTO.class
 com\example\autenticacion\dto\AuthResponseDTO$AuthResponseDTOBuilder.class
 com\example\autenticacion\AutenticacionApplication.class
 com\example\autenticacion\controller\AutenticacionController.class

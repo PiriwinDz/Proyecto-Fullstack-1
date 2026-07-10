@@ -6,50 +6,57 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
-@Service 
+@Service
 public class JwtService {
 
-    @Value("${jwt.secret}") 
+    @Value("${jwt.secret}")
     private String secret;
 
-    @Value("${jwt.expiration}") 
+    @Value("${jwt.expiration}")
     private long expiration;
 
-    
-    public String generarToken(Long usuarioId, String correo, String rol) {
-        SecretKey key = Keys.hmacShaKeyFor(secret.getBytes()); 
-
-        return Jwts.builder()
-                .subject(correo)                  
-                .claim("usuarioId", usuarioId)    
-                .claim("rol", rol)                
-                .issuedAt(new Date())             
-                .expiration(new Date(System.currentTimeMillis() + expiration)) 
-                .signWith(key)                    
-                .compact();                       
+    private SecretKey obtenerClave() {
+        return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    
+    public String generarToken(Long usuarioId, String correo, String rol) {
+
+        return Jwts.builder()
+                .subject(correo)
+                .claim("usuarioId", usuarioId)
+                .claim("rol", rol)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(obtenerClave())
+                .compact();
+    }
+
     public boolean validarToken(String token) {
+
         try {
-            SecretKey key = Keys.hmacShaKeyFor(secret.getBytes());
-            Jwts.parser().verifyWith(key).build().parseSignedClaims(token); 
-            return true; 
+            Jwts.parser()
+                    .verifyWith(obtenerClave())
+                    .build()
+                    .parseSignedClaims(token);
+
+            return true;
+
         } catch (Exception e) {
-            return false; 
+            return false;
         }
     }
 
-    
     public String obtenerCorreo(String token) {
-        SecretKey key = Keys.hmacShaKeyFor(secret.getBytes());
+
         return Jwts.parser()
-                .verifyWith(key)
+                .verifyWith(obtenerClave())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
-                .getSubject(); 
+                .getSubject();
     }
+
 }

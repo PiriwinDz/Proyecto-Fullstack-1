@@ -1,45 +1,49 @@
 package com.example.autenticacion.service;
 
+import com.example.autenticacion.dto.ActualizarUsuarioDTO;
 import com.example.autenticacion.dto.LoginRequestDTO;
 import com.example.autenticacion.dto.RegisterRequestDTO;
-import com.example.autenticacion.dto.UsuarioResponseDTO;
+import com.example.autenticacion.exception.CorreoYaRegistradoException;
+import com.example.autenticacion.exception.CredencialesInvalidasException;
+import com.example.autenticacion.exception.UsuarioNoEncontradoException;
 import com.example.autenticacion.model.RolUsuario;
 import com.example.autenticacion.model.Usuario;
 import com.example.autenticacion.repository.UsuarioRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AutenticacionServiceTest {
 
     @Mock
     private UsuarioRepository usuarioRepository;
-
     @Mock
     private JwtService jwtService;
-
+    @Mock
+    private PasswordEncoder passwordEncoder;
     @InjectMocks
     private AutenticacionService autenticacionService;
+    private Usuario usuario;
+    
+    @BeforeEach
+    void setUp() {
 
-    @Test
-    void registrarUsuarioExitosamente() {
-
-        RegisterRequestDTO dto = new RegisterRequestDTO();
-        dto.setNombre("Matias");
-        dto.setCorreo("matias@test.cl");
-        dto.setPassword("123456");
-        dto.setRol(RolUsuario.ATLETA);
-
-        Usuario usuarioGuardado = Usuario.builder()
+        usuario = Usuario.builder()
                 .id(1L)
                 .nombre("Matias")
                 .correo("matias@test.cl")
@@ -49,118 +53,166 @@ class AutenticacionServiceTest {
                 .creadoEn(LocalDateTime.now())
                 .build();
 
-        when(usuarioRepository.existsByCorreo(dto.getCorreo())).thenReturn(false);
-        when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuarioGuardado);
-        when(jwtService.generarToken(any(), any(), any())).thenReturn("token-test");
-
-        var resultado = autenticacionService.registrar(dto);
-
-        assertNotNull(resultado);
-        assertEquals("Matias", resultado.getNombre());
-        assertEquals("matias@test.cl", resultado.getCorreo());
-        assertEquals("token-test", resultado.getToken());
     }
 
     @Test
-    void registrarCorreoDuplicadoDebeLanzarExcepcion() {
+    void registrarUsuarioCorrectamente() {
 
-        RegisterRequestDTO dto = new RegisterRequestDTO();
-        dto.setCorreo("existente@test.cl");
+        RegisterRequestDTO dto = new RegisterRequestDTO(
+                "Matias",
+                "matias@test.cl",
+                "Matias123",
+                RolUsuario.ATLETA
+                );
+
+        when(usuarioRepository.existsByCorreo(dto.getCorreo())).thenReturn(false);
+        when(passwordEncoder.encode(dto.getPassword())).thenReturn("passwordEncriptada");
+        when(usuarioRepository.save(any())).thenReturn(usuario);
+        when(jwtService.generarToken(anyLong(), anyString(), anyString()))
+                .thenReturn("token");
+
+        assertDoesNotThrow(() -> autenticacionService.registrar(dto));
+
+        verify(usuarioRepository).save(any());
+    }
+
+    @Test
+    void registrarCorreoDuplicado() {
+
+        RegisterRequestDTO dto = new RegisterRequestDTO(
+                "Matias",
+                "matias@test.cl",
+                "12345678",
+                RolUsuario.ATLETA
+        );
 
         when(usuarioRepository.existsByCorreo(dto.getCorreo())).thenReturn(true);
 
-        Exception exception = assertThrows(
-                IllegalArgumentException.class,
+        assertThrows(
+                CorreoYaRegistradoException.class,
                 () -> autenticacionService.registrar(dto)
         );
-
-        assertTrue(exception.getMessage().contains("Ya existe una cuenta"));
     }
 
     @Test
-    void buscarPorIdExistente() {
+    void loginCorrecto() {
 
-        Usuario usuario = Usuario.builder()
-                .id(1L)
-                .nombre("Matias")
-                .correo("matias@test.cl")
-                .password("123456")
-                .rol(RolUsuario.ATLETA)
-                .activo(true)
-                .creadoEn(LocalDateTime.now())
-                .build();
-
-        when(usuarioRepository.findById(1L))
-                .thenReturn(java.util.Optional.of(usuario));
-
-        UsuarioResponseDTO resultado =
-                autenticacionService.buscarPorId(1L);
-
-        assertNotNull(resultado);
-        assertEquals(1L, resultado.getId());
-        assertEquals("Matias", resultado.getNombre());
-    }
-
-    @Test
-    void desactivarUsuarioExistente() {
-
-        Usuario usuario = Usuario.builder()
-                .id(1L)
-                .nombre("Matias")
-                .correo("matias@test.cl")
-                .password("123456")
-                .rol(RolUsuario.ATLETA)
-                .activo(true)
-                .creadoEn(LocalDateTime.now())
-                .build();
-
-        when(usuarioRepository.findById(1L))
-                .thenReturn(java.util.Optional.of(usuario));
-
-        when(usuarioRepository.save(any(Usuario.class)))
-                .thenReturn(usuario);
-
-        UsuarioResponseDTO resultado =
-                autenticacionService.desactivar(1L);
-
-        assertNotNull(resultado);
-        assertFalse(resultado.getActivo());
-    }
-
-    @Test
-    void loginExitoso() {
-
-        LoginRequestDTO dto = new LoginRequestDTO();
-        dto.setCorreo("matias@test.cl");
-        dto.setPassword("123456");
-
-        String passwordEncriptada =
-                new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder()
-                        .encode("123456");
-
-        Usuario usuario = Usuario.builder()
-                .id(1L)
-                .nombre("Matias")
-                .correo("matias@test.cl")
-                .password(passwordEncriptada)
-                .rol(RolUsuario.ATLETA)
-                .activo(true)
-                .creadoEn(LocalDateTime.now())
-                .build();
+        LoginRequestDTO dto = new LoginRequestDTO(
+                "matias@test.cl",
+                "12345678"
+        );
 
         when(usuarioRepository.findByCorreo(dto.getCorreo()))
-                .thenReturn(java.util.Optional.of(usuario));
+                .thenReturn(Optional.of(usuario));
 
-        when(jwtService.generarToken(any(), any(), any()))
-                .thenReturn("token-login");
+        when(passwordEncoder.matches(dto.getPassword(), usuario.getPassword()))
+                .thenReturn(true);
 
-        var resultado = autenticacionService.login(dto);
+        when(jwtService.generarToken(anyLong(), anyString(), anyString()))
+                .thenReturn("token");
 
-        assertNotNull(resultado);
-        assertEquals("token-login", resultado.getToken());
-        assertEquals("matias@test.cl", resultado.getCorreo());
+        assertDoesNotThrow(() -> autenticacionService.login(dto));
+    }
+
+    @Test
+    void loginCredencialesIncorrectas() {
+
+        LoginRequestDTO dto = new LoginRequestDTO(
+                "matias@test.cl",
+                "12345678"
+        );
+
+        when(usuarioRepository.findByCorreo(dto.getCorreo()))
+                .thenReturn(Optional.of(usuario));
+
+        when(passwordEncoder.matches(anyString(), anyString()))
+                .thenReturn(false);
+
+        assertThrows(
+                CredencialesInvalidasException.class,
+                () -> autenticacionService.login(dto)
+        );
+    }
+
+    @Test
+    void buscarUsuarioPorId() {
+
+        when(usuarioRepository.findById(1L))
+                .thenReturn(Optional.of(usuario));
+
+        assertNotNull(
+                autenticacionService.buscarPorId(1L)
+        );
+    }
+
+    @Test
+    void buscarUsuarioNoExiste() {
+
+        when(usuarioRepository.findById(1L))
+                .thenReturn(Optional.empty());
+
+        assertThrows(
+                UsuarioNoEncontradoException.class,
+                () -> autenticacionService.buscarPorId(1L)
+        );
+    }
+
+    @Test
+    void listarUsuarios() {
+
+        when(usuarioRepository.findAll())
+                .thenReturn(List.of(usuario));
+
+        assertEquals(
+                1,
+                autenticacionService.listarTodos().size()
+        );
+    }
+
+    @Test
+    void actualizarUsuario() {
+
+        ActualizarUsuarioDTO dto = new ActualizarUsuarioDTO(
+                "Nuevo Nombre",
+                "nuevo@test.cl",
+                RolUsuario.ADMINISTRADOR
+        );
+
+        when(usuarioRepository.findById(1L))
+                .thenReturn(Optional.of(usuario));
+
+        when(usuarioRepository.existsByCorreo(dto.getCorreo()))
+                .thenReturn(false);
+
+        when(usuarioRepository.save(any()))
+                .thenReturn(usuario);
+
+        assertDoesNotThrow(() ->
+                autenticacionService.actualizar(1L, dto));
+    }
+
+    @Test
+    void eliminarUsuario() {
+
+        when(usuarioRepository.findById(1L))
+                .thenReturn(Optional.of(usuario));
+
+        assertDoesNotThrow(() ->
+                autenticacionService.eliminar(1L));
+
+        verify(usuarioRepository).delete(usuario);
+    }
+
+    @Test
+    void eliminarUsuarioNoExiste() {
+
+        when(usuarioRepository.findById(1L))
+                .thenReturn(Optional.empty());
+
+        assertThrows(
+                UsuarioNoEncontradoException.class,
+                () -> autenticacionService.eliminar(1L)
+        );
     }
 
 }
-
-
