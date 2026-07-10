@@ -1,7 +1,10 @@
 package com.example.catalogo.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -9,7 +12,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.catalogo.dto.EjercicioDTO;
+import com.example.catalogo.exception.EjercicioNoEncontradoException;
 import com.example.catalogo.model.Ejercicio;
 import com.example.catalogo.repository.EjercicioRepository;
 
@@ -29,79 +32,152 @@ class EjercicioServiceTest {
     @InjectMocks
     private EjercicioService ejercicioService;
 
-    private EjercicioDTO ejercicioDTO;
-    private Ejercicio ejercicio;
-
-    @BeforeEach
-    void setUp() {
-        ejercicioDTO = new EjercicioDTO("Press de Banca", "Pecho", "Ejercicio de pecho con barra.");
-        ejercicio = new Ejercicio(1L, "Press de Banca", "Pecho", "Ejercicio de pecho con barra.");
-    }
-
     @Test
-    void testGuardarEjercicio() {
-        
-        when(ejercicioRepository.save(any(Ejercicio.class))).thenReturn(ejercicio);
+    void crearEjercicio() {
 
-        
-        Ejercicio resultado = ejercicioService.guardarEjercicio(ejercicioDTO);
+        EjercicioDTO dto = new EjercicioDTO(
+                "Press de Banca",
+                "Pecho",
+                "Ejercicio de pecho con barra."
+        );
 
-        
+        Ejercicio ejercicio = new Ejercicio(
+                1L,
+                "Press de Banca",
+                "Pecho",
+                "Ejercicio de pecho con barra."
+        );
+
+        when(ejercicioRepository.save(any(Ejercicio.class)))
+                .thenReturn(ejercicio);
+
+        Ejercicio resultado = ejercicioService.crear(dto);
+
         assertNotNull(resultado);
         assertEquals("Press de Banca", resultado.getNombre());
-        verify(ejercicioRepository).save(any(Ejercicio.class)); // Verifica que el método save fue llamado
+
+        verify(ejercicioRepository).save(any(Ejercicio.class));
     }
 
     @Test
-    void testListarTodo_ConResultados() {
-        
-        when(ejercicioRepository.findAll()).thenReturn(List.of(ejercicio));
+    void listarEjercicios() {
 
-        
-        List<Ejercicio> resultados = ejercicioService.listarTodo();
+        Ejercicio ejercicio = new Ejercicio(
+                1L,
+                "Press de Banca",
+                "Pecho",
+                "Ejercicio de pecho con barra."
+        );
 
-        
-        assertNotNull(resultados);
+        when(ejercicioRepository.findAll())
+                .thenReturn(List.of(ejercicio));
+
+        List<Ejercicio> resultados = ejercicioService.listar();
+
         assertEquals(1, resultados.size());
         assertEquals("Press de Banca", resultados.get(0).getNombre());
     }
 
     @Test
-    void testListarTodo_Vacio() {
-        
-        when(ejercicioRepository.findAll()).thenReturn(Collections.emptyList());
+    void listarEjerciciosVacio() {
 
-       
-        List<Ejercicio> resultados = ejercicioService.listarTodo();
+        when(ejercicioRepository.findAll())
+                .thenReturn(Collections.emptyList());
 
-       
+        List<Ejercicio> resultados = ejercicioService.listar();
+
         assertNotNull(resultados);
-        assertTrue(resultados.isEmpty());
-    }
-
-
-    @Test
-    void testBuscarPorId_Encontrado() {
-       
-        when(ejercicioRepository.findById(1L)).thenReturn(Optional.of(ejercicio));
-
-        
-        Optional<Ejercicio> resultado = ejercicioService.buscarPorId(1L);
-
-        
-        assertTrue(resultado.isPresent());
-        assertEquals("Press de Banca", resultado.get().getNombre());
+        assertEquals(0, resultados.size());
     }
 
     @Test
-    void testBuscarPorId_NoEncontrado() {
-        
-        when(ejercicioRepository.findById(99L)).thenReturn(Optional.empty());
+    void buscarEjercicioPorId() {
 
-        
-        Optional<Ejercicio> resultado = ejercicioService.buscarPorId(99L);
+        Ejercicio ejercicio = new Ejercicio(
+                1L,
+                "Press de Banca",
+                "Pecho",
+                "Ejercicio de pecho con barra."
+        );
 
-        
-        assertFalse(resultado.isPresent());
+        when(ejercicioRepository.findById(1L))
+                .thenReturn(Optional.of(ejercicio));
+
+        Ejercicio resultado = ejercicioService.buscarPorId(1L);
+
+        assertNotNull(resultado);
+        assertEquals("Press de Banca", resultado.getNombre());
     }
+
+    @Test
+    void buscarEjercicioNoExistente() {
+
+        when(ejercicioRepository.findById(99L))
+                .thenReturn(Optional.empty());
+
+        assertThrows(
+                EjercicioNoEncontradoException.class,
+                () -> ejercicioService.buscarPorId(99L));
+    }
+
+    @Test
+    void actualizarEjercicio() {
+
+        EjercicioDTO dto = new EjercicioDTO(
+                "Press Inclinado",
+                "Pecho",
+                "Actualizado"
+        );
+
+        Ejercicio ejercicio = new Ejercicio(
+                1L,
+                "Press de Banca",
+                "Pecho",
+                "Ejercicio original"
+        );
+
+        when(ejercicioRepository.findById(1L))
+                .thenReturn(Optional.of(ejercicio));
+
+        when(ejercicioRepository.save(any(Ejercicio.class)))
+                .thenReturn(ejercicio);
+
+        Ejercicio resultado = ejercicioService.actualizar(1L, dto);
+
+        assertEquals("Press Inclinado", resultado.getNombre());
+        assertEquals("Pecho", resultado.getGrupoMuscular());
+        assertEquals("Actualizado", resultado.getDescripcion());
+    }
+
+    @Test
+    void eliminarEjercicio() {
+
+        Ejercicio ejercicio = new Ejercicio(
+                1L,
+                "Press de Banca",
+                "Pecho",
+                "Ejercicio de pecho con barra."
+        );
+
+        when(ejercicioRepository.findById(1L))
+                .thenReturn(Optional.of(ejercicio));
+
+        doNothing().when(ejercicioRepository).delete(ejercicio);
+
+        ejercicioService.eliminar(1L);
+
+        verify(ejercicioRepository).delete(ejercicio);
+    }
+
+    @Test
+    void eliminarEjercicioNoExistente() {
+
+        when(ejercicioRepository.findById(99L))
+                .thenReturn(Optional.empty());
+
+        assertThrows(
+                EjercicioNoEncontradoException.class,
+                () -> ejercicioService.eliminar(99L));
+    }
+
 }

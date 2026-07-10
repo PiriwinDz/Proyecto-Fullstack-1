@@ -1,21 +1,26 @@
 package com.example.catalogo.controller;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.hamcrest.Matchers.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
-import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.catalogo.dto.EjercicioDTO;
 import com.example.catalogo.model.Ejercicio;
@@ -34,23 +39,27 @@ class EjercicioControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private EjercicioDTO ejercicioDTO;
-    private Ejercicio ejercicio;
-
-    @BeforeEach
-    void setUp() {
-        ejercicioDTO = new EjercicioDTO("Press de Banca", "Pecho", "Ejercicio de pecho con barra.");
-        ejercicio = new Ejercicio(1L, "Press de Banca", "Pecho", "Ejercicio de pecho con barra.");
-    }
-
     @Test
-    void testCrearEjercicio() throws Exception {
-        
-        when(ejercicioService.guardarEjercicio(any(EjercicioDTO.class))).thenReturn(ejercicio);
+    void crearEjercicio() throws Exception {
 
-        
+        EjercicioDTO ejercicioDTO = new EjercicioDTO(
+                "Press de Banca",
+                "Pecho",
+                "Ejercicio de pecho con barra."
+        );
+
+        Ejercicio ejercicio = new Ejercicio(
+                1L,
+                "Press de Banca",
+                "Pecho",
+                "Ejercicio de pecho con barra."
+        );
+
+        when(ejercicioService.crear(any(EjercicioDTO.class)))
+                .thenReturn(ejercicio);
+
         mockMvc.perform(post("/api/ejercicios")
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(ejercicioDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.ejercicioId", is(1)))
@@ -58,11 +67,18 @@ class EjercicioControllerTest {
     }
 
     @Test
-    void testListarTodo() throws Exception {
-        
-        when(ejercicioService.listarTodo()).thenReturn(List.of(ejercicio));
+    void listarEjercicios() throws Exception {
 
-       
+        Ejercicio ejercicio = new Ejercicio(
+                1L,
+                "Press de Banca",
+                "Pecho",
+                "Ejercicio de pecho con barra."
+        );
+
+        when(ejercicioService.listar())
+                .thenReturn(List.of(ejercicio));
+
         mockMvc.perform(get("/api/ejercicios"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -70,11 +86,18 @@ class EjercicioControllerTest {
     }
 
     @Test
-    void testBuscarPorId_Encontrado() throws Exception {
-        
-        when(ejercicioService.buscarPorId(1L)).thenReturn(Optional.of(ejercicio));
+    void buscarEjercicioPorId() throws Exception {
 
-        
+        Ejercicio ejercicio = new Ejercicio(
+                1L,
+                "Press de Banca",
+                "Pecho",
+                "Ejercicio de pecho con barra."
+        );
+
+        when(ejercicioService.buscarPorId(anyLong()))
+                .thenReturn(ejercicio);
+
         mockMvc.perform(get("/api/ejercicios/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.ejercicioId", is(1)))
@@ -82,12 +105,38 @@ class EjercicioControllerTest {
     }
 
     @Test
-    void testBuscarPorId_NoEncontrado() throws Exception {
-        
-        when(ejercicioService.buscarPorId(99L)).thenReturn(Optional.empty());
+    void actualizarEjercicio() throws Exception {
 
-        
-        mockMvc.perform(get("/api/ejercicios/99"))
-                .andExpect(status().isNotFound());
+        EjercicioDTO ejercicioDTO = new EjercicioDTO(
+                "Press Inclinado",
+                "Pecho",
+                "Actualizado"
+        );
+
+        Ejercicio ejercicioActualizado = new Ejercicio(
+                1L,
+                "Press Inclinado",
+                "Pecho",
+                "Actualizado"
+        );
+
+        when(ejercicioService.actualizar(anyLong(), any(EjercicioDTO.class)))
+                .thenReturn(ejercicioActualizado);
+
+        mockMvc.perform(put("/api/ejercicios/1")
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(ejercicioDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nombre", is("Press Inclinado")));
     }
+
+    @Test
+    void eliminarEjercicio() throws Exception {
+
+        doNothing().when(ejercicioService).eliminar(anyLong());
+
+        mockMvc.perform(delete("/api/ejercicios/1"))
+                .andExpect(status().isNoContent());
+    }
+
 }
